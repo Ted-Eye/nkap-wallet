@@ -8,7 +8,6 @@ import Wallets from '../../pages/walletsList/Wallets'
 export default function Feed({transactions, revenues, expenses, getTotal, balance, handleCancel, userSettings}) {
 
 
-
     return (
         <Box flex={4}>
             <h2>Your account balance:</h2>
@@ -38,7 +37,8 @@ export default function Feed({transactions, revenues, expenses, getTotal, balanc
                 />
 
             </div>
-            <Wallets/>
+            <Wallets 
+                userSettings={userSettings} />
                 
         </Box>
     )

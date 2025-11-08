@@ -42,9 +42,9 @@ const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel
         getUserSettings()
     }
     
-    useEffect(()=>{
-        getUserSettings()
-    },[])
+    // useEffect(()=>{
+    //     getUserSettings()
+    // },[])
     
     useEffect(()=>{
         localStorage.setItem('settings', JSON.stringify(userSettings))

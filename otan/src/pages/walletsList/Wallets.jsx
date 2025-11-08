@@ -5,7 +5,7 @@ import {Box, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornmen
 import {SaveAs, CancelOutlined, DeleteOutline, Edit, AddCardOutlined, WalletOutlined, AttachMoneyOutlined, InfoOutline} from '@mui/icons-material'
 import RechargeForm from "../../components/RechargeForm";
 
-export default function Wallets() {
+export default function Wallets({userSettings}) {
     const [wallets, setWallets] = useState(()=>{
             return JSON.parse(localStorage.getItem('wallets')) || []
         })
@@ -32,17 +32,15 @@ export default function Wallets() {
 		e.preventDefault()
 		setWallets([...wallets, newWallet])
 		alert(`Wallet: "${newWallet.title}" was created successfully`);
-		console.log(newWallet)
 		setNewWallet({
 		id: crypto.randomUUID(),
         title: '',
         accountType: 'Savings account',
-        accountCurrency: 'FCFA',
+        // accountCurrency: 'FCFA',
         accountBalance: 0,
 		minBalance: 0,
 		monthlyLimit: 0
     })
-		
 		// onSave(userSettings)
 	}
 
@@ -59,9 +57,10 @@ export default function Wallets() {
 
 	const handleTopUpOpen = (id)=>{
 		const [walletInstance] = wallets.filter((wallet)=>wallet.id===id);
-		console.log(walletInstance)
+		// console.log(walletInstance)
 		setTargetWallet(walletInstance)
 		setOpenModal(true) 
+		walletInstance.accountBalance
 		
 		
 	}
@@ -69,7 +68,7 @@ export default function Wallets() {
 		setOpenModal(!openModal)
 	}
 	
-	
+
 	useEffect(()=>{
 		localStorage.setItem("wallets", JSON.stringify(wallets))
 	},[wallets])
@@ -80,7 +79,9 @@ export default function Wallets() {
 
 
 		{/* FORM COMPONENT TO CREATING A NEW WALLET */}
-		{/* <Box 
+
+
+		<Box 
 			component="form"
 			// sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
 			sx={{ bgcolor: '#cfe8fc', width: 'xl'}}
@@ -162,7 +163,7 @@ export default function Wallets() {
 				</Button>
 				</Box>
 			</Box>
-		</Box> */}
+		</Box>
 
 
 
@@ -197,7 +198,7 @@ export default function Wallets() {
 							</Typography> */}
 							<br />
 							<Typography variant="p" gutterBottom>
-								{`Balance: ${wallet.accountCurrency }  ${ wallet.accountBalance} `}
+								{`Balance: ${'FCFA' }  ${ wallet.accountBalance} `}
 							</Typography>
 							<br />
 							
@@ -253,7 +254,12 @@ export default function Wallets() {
 									style={{textTransform: 'none'}}>
 							Submit
 							</Button> */}
-							<RechargeForm handleSubmit={handleSave}/>
+							<RechargeForm 
+								wallets={wallets}
+								targetWallet={targetWallet}
+								handleSubmit={handleSave}
+								defaultValue={targetWallet !== null && wallets[targetWallet]}
+								/>
 						</Box>)
 					}
 			</Box>

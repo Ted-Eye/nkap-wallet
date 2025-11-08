@@ -1,10 +1,10 @@
 import { Box, FormControl, InputLabel, Select, MenuItem, OutlinedInput, InputAdornment, Button } from '@mui/material';
 import {PostAdd} from '@mui/icons-material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-export default function RechargeForm({wallets, handleSubmit}) {
+export default function RechargeForm({wallets, handleSubmit, targetWallet, defaultValue}) {
 
-    const [deposit, setDeposit] = useState({
+    const [deposit, setDeposit] = useState(defaultValue || {
         amount: 0,
         method: '',
         note: ''
@@ -13,6 +13,27 @@ export default function RechargeForm({wallets, handleSubmit}) {
     const handleChange = (e)=>{
         setDeposit({...deposit, [e.target.name]: e.target.value})
     }
+
+    const handleDepo = (e)=>{
+        e.preventDefault();
+        targetWallet.accountBalance = parseInt(targetWallet.accountBalance) + parseInt(deposit.amount);
+        alert(`Wallet: "${targetWallet.title}" was recharged with ${deposit.amount} FCFA successfully`);
+        localStorage.setItem("wallets", JSON.stringify(wallets))
+        console.log(targetWallet)
+        
+
+        setDeposit({
+            amount: 0,
+            method: '',
+            note: ''
+        });
+    }
+
+    useEffect(()=>{
+        console.log(wallets)
+        // localStorage.setItem("wallets", JSON.stringify(wallets))
+    },[])
+
     return (
         <>
             <Box
@@ -69,7 +90,7 @@ export default function RechargeForm({wallets, handleSubmit}) {
 
                 </div>
                 <Button 
-                        onClick={handleSubmit}
+                        onClick={handleDepo}
                         variant="outlined"
                         style={{textTransform: 'none'}}
                         >
