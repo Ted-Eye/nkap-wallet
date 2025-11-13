@@ -28,54 +28,54 @@ function App() {
             }
         );
 
-    const getTotal = (transactions)=>{
-            const total = transactions.reduce((sum, transaction)=> sum + parseInt(transaction.amount), 0);
-            return total
-        }
+    // const getTotal = (transactions)=>{
+    //         const total = transactions.reduce((sum, transaction)=> sum + parseInt(transaction.amount), 0);
+    //         return total
+    //     }
 
-    const getTransactions = ()=>{
-            const newRevs = [];
-            const newExp = [];
-            for(const item of transactions){
-                if(item.type === 'Cash-in'){
-                    newRevs.push(item)
-                }else{
-                    newExp.push(item);
-                }
-            }
-            setRevenues(newRevs)
-            setExpenses(newExp)
-        }
+    // const getTransactions = ()=>{
+    //         const newRevs = [];
+    //         const newExp = [];
+    //         for(const item of transactions){
+    //             if(item.type === 'Cash-in'){
+    //                 newRevs.push(item)
+    //             }else{
+    //                 newExp.push(item);
+    //             }
+    //         }
+    //         setRevenues(newRevs)
+    //         setExpenses(newExp)
+    //     }
 
         
-        const getAccountBalance = ()=>{
-            let newBalance = revenues;
-            const totalRevenue = getTotal(revenues);
-            const totalExpenses = getTotal(expenses);
-            newBalance = (totalRevenue - totalExpenses);
-            setBalance(newBalance);
+    //     const getAccountBalance = ()=>{
+    //         let newBalance = revenues;
+    //         const totalRevenue = getTotal(revenues);
+    //         const totalExpenses = getTotal(expenses);
+    //         newBalance = (totalRevenue - totalExpenses);
+    //         setBalance(newBalance);
             
-        }
+    //     }
         
 
-        const handleCancel = (getCurrentId)=>{
-            const updatedTransactions = transactions.filter((transaction)=>transaction.id !==getCurrentId)
-            setTransactions(updatedTransactions)
+    //     const handleCancel = (getCurrentId)=>{
+    //         const updatedTransactions = transactions.filter((transaction)=>transaction.id !==getCurrentId)
+    //         setTransactions(updatedTransactions)
             
-    }
+    // }
         
-        useEffect(()=>{
-            getTransactions();
-        },[])
+    //     useEffect(()=>{
+    //         getTransactions();
+    //     },[])
 
-        useEffect(()=>{
-            getAccountBalance();
-        },[revenues, expenses, transactions]);
+    //     useEffect(()=>{
+    //         getAccountBalance();
+    //     },[revenues, expenses, transactions]);
 
-        useEffect(()=>{
-                localStorage.setItem('transactions', JSON.stringify(transactions))
-                getTransactions()
-            },[transactions])
+    //     useEffect(()=>{
+    //             localStorage.setItem('transactions', JSON.stringify(transactions))
+    //             getTransactions()
+    //         },[transactions])
 
 
     return (
@@ -86,9 +86,9 @@ function App() {
             transactions={transactions}
             revenues={revenues}
             expenses={expenses}
-            getTotal={getTotal}
+            // getTotal={getTotal}
             balance={balance}
-            handleCancel = {handleCancel}
+            // handleCancel = {handleCancel}
         />
 
             {/* <Wallets/> */}

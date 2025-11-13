@@ -5,53 +5,87 @@ import {PostAdd} from '@mui/icons-material'
 import IncomeSources from '../pages/walletsList/IncomeSources';
 import ExpenseMotives from '../pages/walletsList/ExpenseMotives';
 
-const AddTransaction = ({userSettings}) => {
+const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) => {
     
-    const [type, setType] = useState('Cash-in')
-        const [amount, setAmount] = useState(0);
-        const [motive, setMotive] = useState('');
-        const [note, setNote] = useState('')
-        const [date, setDate] = useState('');
+
+    // const [type, setType] = useState('Cash-in')
+    //     const [amount, setAmount] = useState(0);
+    //     const [motive, setMotive] = useState('');
+    //     const [note, setNote] = useState('')
+    //     const [date, setDate] = useState('');
+
         const [transactions, setTransactions] = useState(()=>{
             return JSON.parse(localStorage.getItem('transactions')) || []
         })
     
+    const [newTransaction, setNewTransaction] = useState({
+        id: crypto.randomUUID(),
+        wallet:targetWallet.title, 
+        type: 'Cash-in', 
+        amount: 0, 
+        motive: '', 
+        note: '', 
+        date: ''
+    })
+    
+    
     const handleChange = (e)=>{
-        setMotive(e.target.value)
+        // setMotive(e.target.value)
+        setNewTransaction({...newTransaction, [e.target.name]: e.target.value});
+        
+        // if(newTransaction.type==="Cash-in"){
+        //     setNewTransaction(newTransaction=>({...newTransaction, motive:'Salary'}))
+        // }else if(newTransaction.type==="Cash-out"){
+        //     setNewTransaction(newTransaction=>({...newTransaction, motive: "Shopping"}))
+        // }
     }
 
+    // DEFAULT TRANSACTION MOTIVES
+
     useEffect(()=>{
-        if(type==="Cash-in"){
-            setMotive("Salary")
-        }else if(type==="Cash-out"){
-            setMotive("Shopping")
+        if(newTransaction.type==="Cash-in"){
+            setNewTransaction(newTransaction=>({...newTransaction, motive:"Salary"}))
+        }else
+            {
+            setNewTransaction(newTransaction=>({...newTransaction, motive: "Shopping"}))
         }
-    }, [type])
-    const handleSubmit = ()=>{
-        const newTransactions = [...transactions, {
+    }, [newTransaction.type])
+
+    const handleSubmit = (e)=>{
+        // const updatedTransactions = [...transactions, {
                 
-                // id: transactions.length === 0? 1 : (transactions.length + 1),
-                id: crypto.randomUUID(),
-                type: type,
-                amount: parseInt(amount),
-                motive: motive,
-                date: date,
-            },];
-            if(amount==0){
+        //         // id: transactions.length === 0? 1 : (transactions.length + 1),
+        //         id: crypto.randomUUID(),
+        //         type: type,
+        //         amount: parseInt(amount),
+        //         motive: motive,
+        //         date: date,
+        //     },];
+        e.preventDefault();
+        
+        const updatedTransactions = [...transactions, newTransaction];
+        setTransactions(updatedTransactions);
+            if(newTransaction.amount===0){
                 alert('Please enter amount')
-            }else if(motive.length <= 3){
-                alert('Please enter a valid motive/source')
-            }else if(type === "Cash-out" && amount >= parseInt(userSettings.marginalBalance)){
+            }else if(newTransaction.type === "Cash-out" && newTransaction.amount >= parseInt(targetWallet.accountBalance)-parseInt(targetWallet.minBalance)){
                 alert("Can't afford this this item. ")
+            }else if(newTransaction.type==='Cash-in'){
+                targetWallet.accountBalance+= parseInt(newTransaction.amount);
+                targetWallet.revenues.push(newTransaction)
+                localStorage.setItem('wallets', JSON.stringify(wallets));
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                alert("Transaction completed!")
+                alert(`Wallet: "${targetWallet.title}" was successfully recharged with ${newTransaction.amount} FCFA`);
             }
+
             else {
-                localStorage.setItem('transactions', JSON.stringify(transactions))
-                setTransactions(newTransactions);
-                alert("Transaction added successfully!")
-                setAmount(0);
-                setType('Cash-in');
-                setMotive(motive);
-                setDate(date);                
+                targetWallet.accountBalance-= parseInt(newTransaction.amount);
+                targetWallet.expenses.push(newTransaction)
+                localStorage.setItem('wallets', JSON.stringify(wallets));
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                alert("Transaction completed!")
+                alert(`Wallet: "${targetWallet.title}" was successfully debited with ${newTransaction.amount} FCFA`);
+                setNewTransaction(newTransaction);                
                     }
     }
 
@@ -74,10 +108,11 @@ const AddTransaction = ({userSettings}) => {
                     <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={type}
+                    value={newTransaction.type}
                     label="Type"
+                    name='type'
                     // color={type === "Cash-out"? 'warning': "success"}
-                    onChange={(e)=>{setType(e.target.value)}}
+                    onChange={handleChange}
                     >
                     <MenuItem value="Cash-in">Cash-in</MenuItem>
                     <MenuItem value="Cash-out">Cash-out</MenuItem>
@@ -91,9 +126,10 @@ const AddTransaction = ({userSettings}) => {
                     <OutlinedInput
                     id="filled-adornment-amount"
                     label="Enter Amount"
-                    value={amount}
-                    onChange={(e)=>{setAmount(e.target.value)}}
-                    startAdornment={<InputAdornment position="start">{userSettings.currency}</InputAdornment>}
+                    value={newTransaction.amount}
+                    name='amount'
+                    onChange={handleChange}
+                    startAdornment={<InputAdornment position="start">FCFA</InputAdornment>}
                     />
                 </FormControl>
                 
@@ -105,27 +141,32 @@ const AddTransaction = ({userSettings}) => {
                     required
                     id="outlined-required"
                     label="Enter a brief note"
-                    onChange={(e)=>setNote(e.target.value)}
-                    value={note}
+                    onChange={handleChange}
+                    value={newTransaction.note}
+                    name='note'
                     placeholder="Brief note(optional)"
                 />
                 </FormControl>
 
                 <FormControl sx={{ m: 1 }}>
-                    <InputLabel htmlFor="motive" id="transaction-motive">{type === "Cash-out"? 'Motive': "Source"}</InputLabel>
+                    <InputLabel htmlFor="motive" 
+                                id="transaction-motive"
+                                >{newTransaction.type === "Cash-out"? "Motive": "Source"}</InputLabel>
                     
                     {
-                        type == "Cash-in"? 
+                        newTransaction.type == "Cash-in"? 
                         <IncomeSources 
                         Select ={Select}
-                        type={type}
-                        motive={motive}
+                        type={newTransaction.type}
+                        motive={newTransaction.motive}
+                        name={"motive"}
                         handleChange={handleChange}
                         MenuItem={MenuItem}/>
                         : <ExpenseMotives
                         Select ={Select}
-                        type={type}
-                        motive={motive}
+                        type={newTransaction.type}
+                        motive={newTransaction.motive}
+                        name={"motive"}
                         handleChange={handleChange}
                         MenuItem={MenuItem}
                         />
@@ -139,7 +180,7 @@ const AddTransaction = ({userSettings}) => {
                         variant="outlined"
                         style={{textTransform: 'none'}}
                         >
-                    <PostAdd/>Add
+                    <PostAdd/>Submit
                 </Button>
             </Box>
         </>

@@ -62,7 +62,7 @@ const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel
                 >
                     <Stack direction={'row'} justifyContent={'space-between'} >
                 
-                        <Feed
+                        {/* <Feed
                                         transactions={transactions}
                                     revenues={revenues}
                                     expenses={expenses}
@@ -70,7 +70,7 @@ const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel
                                     balance={balance}
                                     handleCancel = {handleCancel}
                                     userSettings={userSettings}
-                                    />
+                                    /> */}
                         <Sidebar onSave={updateUserSettings} userSettings={userSettings}/>
                     </Stack>
                     
