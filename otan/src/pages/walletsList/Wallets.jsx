@@ -4,12 +4,14 @@ import {Box, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornmen
 
 import {SaveAs, CancelOutlined, DeleteOutline, Edit, AddCardOutlined, WalletOutlined, AttachMoneyOutlined, InfoOutline} from '@mui/icons-material'
 import RechargeForm from "../../components/RechargeForm";
+import AddTransaction from "../../components/AddTransaction";
 
-export default function Wallets({userSettings}) {
+export default function Wallets() {
     const [wallets, setWallets] = useState(()=>{
             return JSON.parse(localStorage.getItem('wallets')) || []
         })
 	
+	const userSettings = JSON.parse(localStorage.getItem('settings'))
     const [newWallet, setNewWallet] = useState({
 		id: crypto.randomUUID(),
         title: '',
@@ -39,7 +41,8 @@ export default function Wallets({userSettings}) {
         // accountCurrency: 'FCFA',
         accountBalance: 0,
 		minBalance: 0,
-		monthlyLimit: 0
+		monthlyLimit: 0,
+		
     })
 		// onSave(userSettings)
 	}
@@ -67,7 +70,6 @@ export default function Wallets({userSettings}) {
 	const cancelTopUp = ()=>{
 		setOpenModal(!openModal)
 	}
-	
 
 	useEffect(()=>{
 		localStorage.setItem("wallets", JSON.stringify(wallets))
@@ -197,10 +199,14 @@ export default function Wallets({userSettings}) {
 								{`Min Balance: ${wallet.accountCurrency }${wallet.minBalance} `}
 							</Typography> */}
 							<br />
-							<Typography variant="p" gutterBottom>
-								{`Balance: ${'FCFA' }  ${ wallet.accountBalance} `}
+							<Typography variant="h4" gutterBottom>
+								{`Balance: ${userSettings.currency }  ${ wallet.accountBalance} `}
 							</Typography>
 							<br />
+
+							<Typography variant="p" gutterBottom>
+								{`Monthly Limit: ${userSettings.currency }  ${ wallet.monthlyLimit} `}
+							</Typography>
 							
 					</CardContent>
 					<Box sx={{paddingTop:'25px', paddingBottom: '10px', backgroundColor: '#cfe8fc'}}>
@@ -254,12 +260,22 @@ export default function Wallets({userSettings}) {
 									style={{textTransform: 'none'}}>
 							Submit
 							</Button> */}
-							<RechargeForm 
+
+
+							{/* <RechargeForm 
 								wallets={wallets}
 								targetWallet={targetWallet}
 								handleSubmit={handleSave}
 								defaultValue={targetWallet !== null && wallets[targetWallet]}
-								/>
+								/> */}
+
+							{/* WIRING THE ADDTRANSACTION COMPONENT TO WALLETS */}
+							<AddTransaction
+								wallets={wallets}
+								targetWallet={targetWallet}
+								handleSubmit={handleSave}
+								defaultValue={targetWallet !== null && wallets[targetWallet]}
+							/>
 						</Box>)
 					}
 			</Box>

@@ -1,10 +1,10 @@
 import React from 'react'
 import UserPreferences from '../UserPreferences'
 import {Box, Typography, Stack, Container, Button, Grid} from '@mui/material';
-import {Home, Settings, Settings as SettingsIcon} from '@mui/icons-material'
+import {Home as HomeIcon, Settings, Settings as SettingsIcon} from '@mui/icons-material'
 // import '../styles/Sidebar.css'
-import Preferences from '../Preferences'
 import Wallets from '../../pages/walletsList/Wallets';
+import Preferences from '../../pages/Preferences/Preferences';
 
 const Sidebar = ({userSettings, onSave}) => {
 
@@ -19,21 +19,20 @@ const Sidebar = ({userSettings, onSave}) => {
                 <Typography variant='p'>
                     Username
                 </Typography>
-                <Wallets/>
+                <Wallets userSettings={userSettings}/>
                 <Box>
                     <Button>
-                        <Home/>
+                        <HomeIcon/>
                         <Typography variant='p' ml={2}>Home</Typography>
                     </Button>
                     <Button>
-                        <Settings/>
+                        <SettingsIcon/>
                         <Typography variant='p' ml={2}>Settings</Typography>
                     </Button>
                 </Box>
                 
             </Grid>
             </Box>
-            
         </Box>
             
         

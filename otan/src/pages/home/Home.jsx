@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 // import './Home.css';
 import AddTransaction from '../../components/AddTransaction';
 import TransactionCard from '../../components/TransactionCard';
-import Preferences from '../../components/Preferences';
-import UserPreferences from '../../components/UserPreferences';
 import Sidebar from '../../components/layouts/Sidebar';
 import NavBar from '../../components/layouts/NavBar';
 
@@ -17,13 +15,13 @@ import Feed from '../../components/layouts/Feed';
 
 
 
-const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel}) => {
+const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel, onChange, onUpdate}) => {
 
     
 
     
     const [userSettings, setUserSettings] = useState(()=>{
-            return JSON.parse(localStorage.getItem('settings')) || {currency: 'FCFA', marginalBalance: 0, purchasingPower: 0, monthlyLimit: 0 }
+            return JSON.parse(localStorage.getItem('settings')) || {currency: 'FCFA', theme: 'light'}
         })
 
     const getUserSettings = () =>{
@@ -71,7 +69,11 @@ const Home = ({transactions, revenues, expenses, getTotal, balance, handleCancel
                                     handleCancel = {handleCancel}
                                     userSettings={userSettings}
                                     /> */}
-                        <Sidebar onSave={updateUserSettings} userSettings={userSettings}/>
+                        <Sidebar onSave={updateUserSettings} 
+                                userSettings={userSettings}
+                                onChange={onChange}
+                                onUpdate={onUpdate}
+                        />
                     </Stack>
                     
                     

@@ -1,14 +1,15 @@
 import React from 'react'
 
-export default function ExpenseMotives({Select, MenuItem, type, motive, handleChange}) {
+export default function ExpenseMotives({Select, MenuItem, name, type, motive, handleChange}) {
     return (
         <>
             <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={motive}
-                    label={type === "Cash-out"? 'Motive': "Source"}
-                    // color={type === "Cash-out"? 'warning': "success"}
+                    label={type === "Cash-out"? "Motive": "Source"}
+                    name={name}
+                    color={type === "Cash-out"? 'warning': "success"}
                     onChange={handleChange}
                     >
                     <MenuItem value="Shopping">Shopping</MenuItem>

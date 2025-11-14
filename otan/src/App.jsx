@@ -16,6 +16,9 @@ import Wallets from './pages/walletsList/Wallets';
 import { Box, Stack } from '@mui/material';
 import Feed from './components/layouts/Feed';
 
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Preferences from './pages/Preferences/Preferences';
+
 
 function App() {
     
@@ -77,24 +80,50 @@ function App() {
     //             getTransactions()
     //         },[transactions])
 
+    const [userSettings, setUserSettings] = useState(()=>{
+        return JSON.parse(localStorage.getItem('settings')) || {currency: 'FCFA', theme: 'light'}
+    })
 
-    return (
-        <Box>
+    const onSettingsChange = (e)=>{
+        setUserSettings({...userSettings, [e.target.name]: e.target.value})
+    }
 
-            <NavBar/>
-            <Home 
-            transactions={transactions}
-            revenues={revenues}
-            expenses={expenses}
-            // getTotal={getTotal}
-            balance={balance}
-            // handleCancel = {handleCancel}
-        />
+    const onSettingsUpdate = (e)=>{
+        e.preventDefault;
+        localStorage.setItem('settings', JSON.stringify(userSettings))
+        getUserSettings()
+    }
+    const getUserSettings = ()=>{
+        setUserSettings(JSON.parse(localStorage.getItem('settings')))
+    }
+    // useEffect(()=>{
+    //     getUserSettings()
+    // },[userSettings])
+    return <>
+            <BrowserRouter>
+                <NavBar/>
+                <Routes>
+                    <Route path='/' element= {
+                        <Home 
+                            transactions={transactions}
+                            revenues={revenues}
+                            expenses={expenses}
+                            onChange = {onSettingsChange}
+                            onUpdate = {onSettingsUpdate}
+                            // getTotal={getTotal}
+                            balance={balance}
+                            // handleCancel = {handleCancel}
+                            />
+                    }/>
+                    <Route path='/preferences' element={
+                        <Preferences/>
+                    }/>
 
-            {/* <Wallets/> */}
-        </Box>
-            
-        )
+                    <Route path='/wallets' element={<Wallets/>}/>
+                    
+                </Routes>
+            </BrowserRouter>
+    </>
     }
 
     export default App

@@ -1,14 +1,16 @@
 
-export default function IncomeSources({Select, MenuItem, type, motive, handleChange}) {
+export default function IncomeSources({Select, MenuItem, name, type, motive, handleChange}) {
 
     return (
+    
         <>
 
             <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={motive}
-                    label={type === "Cash-out"? 'Motive': "Source"}
+                    name={name}
+                    label={type === "Cash-out"? "Motive": "Source"}
                     // color={type === "Cash-out"? 'warning': "success"}
                     onChange={handleChange}
                     >

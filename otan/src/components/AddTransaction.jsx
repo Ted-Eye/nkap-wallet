@@ -14,7 +14,7 @@ const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) =>
     //     const [note, setNote] = useState('')
     //     const [date, setDate] = useState('');
 
-        const [transactions, setTransactions] = useState(()=>{
+    const [transactions, setTransactions] = useState(()=>{
             return JSON.parse(localStorage.getItem('transactions')) || []
         })
     
@@ -87,6 +87,7 @@ const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) =>
                 alert(`Wallet: "${targetWallet.title}" was successfully debited with ${newTransaction.amount} FCFA`);
                 setNewTransaction(newTransaction);                
                     }
+        targetWallet.transactions.push(newTransaction)
     }
 
     useEffect(()=>{
