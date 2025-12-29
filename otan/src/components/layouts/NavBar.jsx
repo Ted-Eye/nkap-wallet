@@ -89,8 +89,8 @@ export default function NavBar() {
             <Typography
                 variant="h6"
                 noWrap
-                component="a"
-                href=""
+                component={NavLink}
+                to={'/'}
                 sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -131,9 +131,13 @@ export default function NavBar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
                 >
-                {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                {pages.map((link, index) => (
+                    <MenuItem 
+                    component= {NavLink}
+                    to={link==='Home'? '/': `/${link}`}
+                    key={link} 
+                    onClick={handleCloseNavMenu}>
+                    <Typography sx={{ textAlign: "center" }}>{link}</Typography>
                     </MenuItem>
                 ))}
                 </Menu>
@@ -162,7 +166,7 @@ export default function NavBar() {
                 <Button
                     key={page}
                     component={NavLink}
-                    to={page === "Home" ? "/" : `/${page.toLowerCase()}`}
+                    to={page==='Home'? '/': `/${page.toLowerCase()}`}
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: "white", display: "block" }}
                 >
