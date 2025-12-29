@@ -37,8 +37,8 @@ export default function Feed({transactions, revenues, expenses, getTotal, balanc
                 />
 
             </div>
-            <Wallets 
-                userSettings={userSettings} />
+            {/* <Wallets 
+                userSettings={userSettings} /> */}
                 
         </Box>
     )

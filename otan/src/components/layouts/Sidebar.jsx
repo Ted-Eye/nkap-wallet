@@ -12,30 +12,40 @@ const Sidebar = ({userSettings, onSave}) => {
     
 
     return (
-        <Box bgcolor={'white'} mt={'2px'} px={'10px'} flex={1} sx={{display: {xs: 'none', sm: 'block'}, }}>
+        <> 
+
+        <Box>
+            <Box bgcolor={'white'} mt={'2px'} px={'10px'} flex={1} sx={{display: {xs: 'none', sm: 'block'}, }}>
             {/* <Preferences onSave={onSave}/> */}
-            <Box position={"fixed"}>
-                <Grid direction={'column'}>
-                <Typography variant='p'>
-                    Username
-                </Typography>
-                <Wallets userSettings={userSettings}/>
+                {/* <Box position={"fixed"}>
+                    <Grid direction={'column'}>
+                        <Typography variant='p'>
+                            Username
+                        </Typography>
+                    </Grid>
+                </Box> */}
+            </Box>
+                
+
+                {/* BOTTOM NAV ICONS */}
+            <Container>
+            <Box>
                 <Box>
                     <Button>
-                        <HomeIcon/>
+                    <HomeIcon/>
+                    </Button>
+                    <Box>
                         <Typography variant='p' ml={2}>Home</Typography>
-                    </Button>
-                    <Button>
-                        <SettingsIcon/>
-                        <Typography variant='p' ml={2}>Settings</Typography>
-                    </Button>
+                    </Box>
                 </Box>
-                
-            </Grid>
+                <Button>
+                    <SettingsIcon/>
+                    <Typography variant='p' ml={2}>Settings</Typography>
+                </Button>
             </Box>
+            </Container>
         </Box>
-            
-        
+        </>
     )
 }
 

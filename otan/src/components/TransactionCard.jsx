@@ -1,6 +1,7 @@
 import './styles/TransactionCard.css'
 export default function TransactionCard({transaction, handleCancel, userSettings, recentTransactions}) {
 
+    
     return (
         <>
             <div>

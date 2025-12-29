@@ -1,6 +1,6 @@
 
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -18,112 +18,83 @@ import Feed from './components/layouts/Feed';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Preferences from './pages/Preferences/Preferences';
+import AllTransactions from './pages/transactionHistory/allTransactions/AllTransactions'
+import MyContainer from './components/layouts/MyContainer';
+import AllWallets from './pages/walletsList/AllWallets';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { transactionSchema, walletSchema, transactionDefaultValues, walletDefaultValues } from './components/forms/FormSchema';
+import { ModalProvider } from './refactor/contexts/ModalContext';
+import { PrefsProvider } from './refactor/contexts/PrefsContext';
+import { WalletProvider } from './refactor/contexts/WalletContext';
+import HomePage from './refactor/pages/HomePage';
+import WalletsPage from './refactor/pages/WalletsPage';
+import TransactionsPage from './refactor/pages/TransactionsPage';
+import SettingsPage from './refactor/pages/SettingsPage';
+import AppModal from './refactor/components/global/AppModal';
+
 
 
 function App() {
-    
-    const [balance, setBalance] = useState(0)
-    const [revenues, setRevenues] = useState([])
-    const [expenses, setExpenses] = useState([])
-    const [transactions, setTransactions] = useState(
-            ()=>{
-                return JSON.parse(localStorage.getItem('transactions')) || []
-            }
-        );
-
-    // const getTotal = (transactions)=>{
-    //         const total = transactions.reduce((sum, transaction)=> sum + parseInt(transaction.amount), 0);
-    //         return total
-    //     }
-
-    // const getTransactions = ()=>{
-    //         const newRevs = [];
-    //         const newExp = [];
-    //         for(const item of transactions){
-    //             if(item.type === 'Cash-in'){
-    //                 newRevs.push(item)
-    //             }else{
-    //                 newExp.push(item);
-    //             }
-    //         }
-    //         setRevenues(newRevs)
-    //         setExpenses(newExp)
-    //     }
-
-        
-    //     const getAccountBalance = ()=>{
-    //         let newBalance = revenues;
-    //         const totalRevenue = getTotal(revenues);
-    //         const totalExpenses = getTotal(expenses);
-    //         newBalance = (totalRevenue - totalExpenses);
-    //         setBalance(newBalance);
-            
-    //     }
-        
-
-    //     const handleCancel = (getCurrentId)=>{
-    //         const updatedTransactions = transactions.filter((transaction)=>transaction.id !==getCurrentId)
-    //         setTransactions(updatedTransactions)
-            
-    // }
-        
-    //     useEffect(()=>{
-    //         getTransactions();
-    //     },[])
-
-    //     useEffect(()=>{
-    //         getAccountBalance();
-    //     },[revenues, expenses, transactions]);
-
-    //     useEffect(()=>{
-    //             localStorage.setItem('transactions', JSON.stringify(transactions))
-    //             getTransactions()
-    //         },[transactions])
-
-    const [userSettings, setUserSettings] = useState(()=>{
-        return JSON.parse(localStorage.getItem('settings')) || {currency: 'FCFA', theme: 'light'}
+    const [bankStatement, setBankStatement]=useState(()=>{
+        return JSON.parse(localStorage.getItem('transactions')) || [];
+    });
+	const [prefs, setPrefs]=  
+    useState(()=>{
+        return JSON.parse(localStorage.getItem('settings'))||{language:'english', currency:'CFA', theme:'light'}
     })
 
-    const onSettingsChange = (e)=>{
-        setUserSettings({...userSettings, [e.target.name]: e.target.value})
-    }
 
-    const onSettingsUpdate = (e)=>{
-        e.preventDefault;
-        localStorage.setItem('settings', JSON.stringify(userSettings))
-        getUserSettings()
-    }
-    const getUserSettings = ()=>{
-        setUserSettings(JSON.parse(localStorage.getItem('settings')))
-    }
-    // useEffect(()=>{
-    //     getUserSettings()
-    // },[userSettings])
-    return <>
-            <BrowserRouter>
-                <NavBar/>
-                <Routes>
-                    <Route path='/' element= {
-                        <Home 
-                            transactions={transactions}
-                            revenues={revenues}
-                            expenses={expenses}
-                            onChange = {onSettingsChange}
-                            onUpdate = {onSettingsUpdate}
-                            // getTotal={getTotal}
-                            balance={balance}
-                            // handleCancel = {handleCancel}
-                            />
-                    }/>
-                    <Route path='/preferences' element={
-                        <Preferences/>
-                    }/>
 
-                    <Route path='/wallets' element={<Wallets/>}/>
+
+	return (
+		<ModalProvider>
+			<PrefsProvider>
+				<WalletProvider>
+					<Routes>
+						<Route path='/' element={<HomePage/>}></Route>
+						<Route path='/wallets' element={<WalletsPage/>}></Route>
+						<Route path='/transactions' element={<TransactionsPage/>}></Route>
+						<Route path='/settings' element={<SettingsPage/>}></Route>
+					</Routes>
+				</WalletProvider>
+			</PrefsProvider>
+		</ModalProvider>
+	)
+    // return <>
+    //         <NavBar/>
+    //             <Routes> 
                     
-                </Routes>
-            </BrowserRouter>
-    </>
+    //                 <Route path='/wallets' element= {
+    //                     <AllWallets bankStatement={bankStatement}/>
+    //                 }/>
+    //                 <Route path='/preferences' element={
+    //                     <Preferences 
+    //                         prefs={prefs}
+    //                         />
+    //                 }/>
+    //                 <Route path='/transactions' element={
+    //                     <AllTransactions
+    //                         bankStatement={bankStatement}
+    //                         prefs={prefs}
+    //                     />
+    //                 }/>
+    //                 <Route path='/' element={<Home 
+    //                     bankStatement={bankStatement}
+    //                     wallets={wallets} 
+    //                     targetWallet={targetWallet}
+	// 					transactionDefaultValues={transactionDefaultValues}
+	// 					defaultValues={defaultValues}
+	// 					prefs={prefs}
+	// 					handleCloseForm={handleCloseForm}
+	// 					handleOpenForm={handleOpenForm}
+	// 					toggleEditMode={toggleEditMode}
+	// 					handleDelete={handleDelete}
+
+    //                     />}/>
+    //             </Routes>
+    //             {/* <Sidebar/> */}
+    // </>
     }
 
     export default App

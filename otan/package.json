@@ -13,11 +13,20 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.6",
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
+    "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
+    "dayjs": "^1.11.19",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.3"
+    "react-hook-form": "^7.68.0",
+    "react-router-dom": "^7.6.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

@@ -7,39 +7,11 @@ import {SaveAs, CancelOutlined} from '@mui/icons-material'
 
 
 
-const Preferences = ({onSave}) => {
+const Preferences = ({onSave, prefs}) => {
     
 
 
-    const [prefs, setPrefs] =  useState(()=>{
-        return JSON.parse(localStorage.getItem('settings')) || {language: 'English', currency: 'FCFA', theme: 'White'}
-    })
-
-    // SINGLE FUNCTION TO HANDLE CHANGE IN ALL INPUT FIELDS
-    const handleChange = (e)=>{
-        setPrefs({...prefs, [e.target.name]: e.target.value})
-    }
     
-    const handleSavePrefs = (e)=>{
-        e.preventDefault()
-        localStorage.setItem('settings', JSON.stringify(prefs))
-
-    }
-    
-    const handleSave = (e)=>{
-        e.preventDefault()
-        onSave(prefs)
-
-    }
-
-    const getPrefs = ()=>{
-        const storedPrefs = JSON.parse(localStorage.getItem('settings'))
-        setPrefs(storedPrefs)
-    }
-
-    useEffect(()=>{
-        localStorage.setItem('settings', JSON.stringify(prefs))
-    },[])
 
     return (
         <>

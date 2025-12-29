@@ -1,102 +1,53 @@
 import { useEffect, useState } from 'react'
-import {Box, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornment, Input, FilledInput, OutlinedInput, Button, Paper} from '@mui/material';
+import {Box, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornment, Input, FilledInput, OutlinedInput, Button, Paper, Container, Typography} from '@mui/material';
+
+import dayjs from 'dayjs';
 
 import {PostAdd} from '@mui/icons-material'
 import IncomeSources from '../pages/walletsList/IncomeSources';
 import ExpenseMotives from '../pages/walletsList/ExpenseMotives';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) => {
-    
 
-    // const [type, setType] = useState('Cash-in')
-    //     const [amount, setAmount] = useState(0);
-    //     const [motive, setMotive] = useState('');
-    //     const [note, setNote] = useState('')
-    //     const [date, setDate] = useState('');
-
-    const [transactions, setTransactions] = useState(()=>{
-            return JSON.parse(localStorage.getItem('transactions')) || []
-        })
-    
-    const [newTransaction, setNewTransaction] = useState({
-        id: crypto.randomUUID(),
-        wallet:targetWallet.title, 
-        type: 'Cash-in', 
-        amount: 0, 
-        motive: '', 
-        note: '', 
-        date: ''
-    })
-    
-    
-    const handleChange = (e)=>{
-        // setMotive(e.target.value)
-        setNewTransaction({...newTransaction, [e.target.name]: e.target.value});
-        
-        // if(newTransaction.type==="Cash-in"){
-        //     setNewTransaction(newTransaction=>({...newTransaction, motive:'Salary'}))
-        // }else if(newTransaction.type==="Cash-out"){
-        //     setNewTransaction(newTransaction=>({...newTransaction, motive: "Shopping"}))
-        // }
-    }
-
-    // DEFAULT TRANSACTION MOTIVES
-
-    useEffect(()=>{
-        if(newTransaction.type==="Cash-in"){
-            setNewTransaction(newTransaction=>({...newTransaction, motive:"Salary"}))
-        }else
-            {
-            setNewTransaction(newTransaction=>({...newTransaction, motive: "Shopping"}))
-        }
-    }, [newTransaction.type])
-
-    const handleSubmit = (e)=>{
-        // const updatedTransactions = [...transactions, {
-                
-        //         // id: transactions.length === 0? 1 : (transactions.length + 1),
-        //         id: crypto.randomUUID(),
-        //         type: type,
-        //         amount: parseInt(amount),
-        //         motive: motive,
-        //         date: date,
-        //     },];
-        e.preventDefault();
-        
-        const updatedTransactions = [...transactions, newTransaction];
-        setTransactions(updatedTransactions);
-            if(newTransaction.amount===0){
-                alert('Please enter amount')
-            }else if(newTransaction.type === "Cash-out" && newTransaction.amount >= parseInt(targetWallet.accountBalance)-parseInt(targetWallet.minBalance)){
-                alert("Can't afford this this item. ")
-            }else if(newTransaction.type==='Cash-in'){
-                targetWallet.accountBalance+= parseInt(newTransaction.amount);
-                targetWallet.revenues.push(newTransaction)
-                localStorage.setItem('wallets', JSON.stringify(wallets));
-                localStorage.setItem('transactions', JSON.stringify(transactions));
-                alert("Transaction completed!")
-                alert(`Wallet: "${targetWallet.title}" was successfully recharged with ${newTransaction.amount} FCFA`);
-            }
-
-            else {
-                targetWallet.accountBalance-= parseInt(newTransaction.amount);
-                targetWallet.expenses.push(newTransaction)
-                localStorage.setItem('wallets', JSON.stringify(wallets));
-                localStorage.setItem('transactions', JSON.stringify(transactions));
-                alert("Transaction completed!")
-                alert(`Wallet: "${targetWallet.title}" was successfully debited with ${newTransaction.amount} FCFA`);
-                setNewTransaction(newTransaction);                
-                    }
-        targetWallet.transactions.push(newTransaction)
-    }
-
-    useEffect(()=>{
-        localStorage.setItem('transactions', JSON.stringify(transactions))
-    },[transactions])
-
+const AddTransaction = ({initialData, onClose, onSubmit, targetWallet, handleSubmit}) => {
+    const {register, control, formState: {errors}} = useFormContext();
 
     return (
         <>
+            <Box component="form" onSubmit={onSubmit} sx={{ p: 4, bgcolor: '#cfe8fc', border: '2px solid #000', boxShadow: 24,}}>
+                <Typography variant="h4" gutterBottom>
+                Add a new transaction:
+            </Typography>
+            <TextField {...register('amount')} 
+							fullWidth
+							margin='normal'
+							label='Transaction Amount' 
+							error={!!errors.amount}
+							helperText={errors.amount?.message}
+                            type='number'
+							>
+
+				</TextField>
+            <TextField {...register('note')} 
+							fullWidth
+							margin='normal'
+							label='Transaction Note' 
+							error={!!errors.note}
+							helperText={errors.note?.message}
+							>
+				</TextField>
+                <Button onClick={onClose} variant="outlined" sx={{marginRight: 5}}>Cancel</Button>
+                <Button type="submit" variant="outlined" >Add Transaction</Button>
+            </Box>
+            
+
+            {/* <Box>
+                <Container>
+                    Recent Transactions
+                </Container>
+            </Box>
+
             <Box
                 component="form"
                 sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
@@ -176,6 +127,15 @@ const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) =>
                 </FormControl>
 
                 </div>
+                
+                <Button 
+                        onClick={handleCancel}
+                        variant="outlined"
+                        style={{textTransform: 'none'}}
+                        >
+                    <PostAdd/>Cancel
+                </Button>
+
                 <Button 
                         onClick={handleSubmit}
                         variant="outlined"
@@ -183,7 +143,7 @@ const AddTransaction = ({userSettings, wallets, targetWallet, defaultValues}) =>
                         >
                     <PostAdd/>Submit
                 </Button>
-            </Box>
+            </Box> */}
         </>
     )
 }
