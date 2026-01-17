@@ -32,6 +32,12 @@ import WalletsPage from './refactor/pages/WalletsPage';
 import TransactionsPage from './refactor/pages/TransactionsPage';
 import SettingsPage from './refactor/pages/SettingsPage';
 import AppModal from './refactor/components/global/AppModal';
+import NavigationLinks from './refactor/components/global/NavigationLinks';
+import { Wallet } from '@mui/icons-material';
+import WalletDetailsPage from './refactor/pages/WalletDetailsPage';
+import TransactionDetailsPage from './refactor/pages/TransactionDetailsPage';
+import { FundingProvider } from './refactor/contexts/FundingAccContext';
+import NavigationBar from './refactor/components/global/NavigationBar';
 
 
 
@@ -51,12 +57,19 @@ function App() {
 		<ModalProvider>
 			<PrefsProvider>
 				<WalletProvider>
-					<Routes>
+                    <FundingProvider>
+                        <NavigationBar/>
+                        <AppModal/>
+                        <Routes>
 						<Route path='/' element={<HomePage/>}></Route>
 						<Route path='/wallets' element={<WalletsPage/>}></Route>
 						<Route path='/transactions' element={<TransactionsPage/>}></Route>
 						<Route path='/settings' element={<SettingsPage/>}></Route>
+                        <Route path='/wallets/:title' element={<WalletDetailsPage/>}></Route>
+                        <Route path='/transactions/:id' element={<TransactionDetailsPage/>}></Route>
 					</Routes>
+                    </FundingProvider>
+                    <NavigationLinks/>
 				</WalletProvider>
 			</PrefsProvider>
 		</ModalProvider>

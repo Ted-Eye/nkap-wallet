@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     TextField,
     Button,
@@ -12,28 +11,43 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useWallet } from '../contexts/WalletContext';
 import {EXPENSE_CATEGORIES, MODAL_TYPES} from '../../refactor/lib/konstants/Defaults';
 import {transactionSchema} from '../schemas/TransactionSchema'
+import SelectField from '../utils/formControls/SelectField';
+import { useState } from 'react';
 
 const motives = EXPENSE_CATEGORIES
 
-export default function SendingForm({payLoad, handleCloseModal}) {
+export default function SendingForm({
+    payLoad, handleCloseModal}) {
     const {register, handleSubmit, control, getValues, formState: {errors, isSubmitting}} = useForm({
             resolver: zodResolver(transactionSchema),
             defaultValues: payLoad
-        })
+        });
     const methods = {
         register, handleSubmit, control, getValues, errors, isSubmitting
     }
+    const {wallets, handleSending,} = useWallet()
+    const wallet = wallets.find((w)=>w.id===payLoad.walletID);
+    const [formData, setFormData] = useState(payLoad);
+
+    const handleChange = (e)=>{
+        const {name, value} = e.target
+        setFormData((formData) => ({...formData, [name]: value}))
+    }
     const onSubmit = (data)=>{
-        console.log('Submitting', data);
+        const balance = wallet.accountBalance
+        if(data.amount>balance){
+            alert('Insufficient balance')
+        }else handleSending(data)
         handleCloseModal()
     }
-    // console.log(payLoad)
+    
     return (
         <FormProvider {...methods}>
             <Box component="form" 
             onSubmit={handleSubmit(onSubmit)} 
-            sx={{ p: 6,  
-            boxShadow: 24,}}>
+            sx={{ p: 4, 
+                    // bgcolor: '#cfe8fc', 
+                    boxShadow: 24,}}>
                             <Typography variant="h4" gutterBottom>
                             Send Money
                         </Typography>
@@ -47,6 +61,13 @@ export default function SendingForm({payLoad, handleCloseModal}) {
                                         >
             
                             </TextField>
+                            
+                            <SelectField 
+                                label='Select motive'
+                                name='motive'
+                                value={formData.motive}
+                                onChange={handleChange}
+                                options={motives}/>
                             <TextField {...register('note')} 
                                         fullWidth
                                         margin='normal'

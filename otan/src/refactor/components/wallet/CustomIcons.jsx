@@ -52,7 +52,7 @@ export const Deposit = ({wallet, handleOpenForm, defaultValues }) => {
     return ( 
         <>
             <Stack>
-                <IconButton onClick={()=>{handleOpenForm('transaction', {...defaultValues, id:crypto.randomUUID(), date: dayjs().toDate(), motive: 'Shopping', type: 'Cash-in', wallet: wallet.title, walletID: wallet.id})}} color='success'>
+                <IconButton onClick={()=>{handleOpenForm('transaction', {...defaultValues, id:crypto.randomUUID(), date: dayjs().toISOString(), motive: 'Shopping', type: 'Cash-in', wallet: wallet.title, walletID: wallet.id})}} color='success'>
                     <ControlPointDuplicateIcon/>
                 </IconButton>
             <Typography variant="body2"> Deposit </Typography>

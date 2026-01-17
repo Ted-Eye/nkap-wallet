@@ -108,9 +108,26 @@ export const INITIAL_TRANSACTIONS = [];
 export const DEFAULT_SETTINGS = {
     currency: 'CFA',
     language: 'en',
-    theme: 'light'
+    theme: 'light',
+    mode: 'simulation'
 };
-
+export const CURRENCIES = [
+    {id: 'franc cfa', value: 'CFA'},
+    {id: 'us dollar', value: 'USD'},
+    {id: 'euro', value: 'Euro'}
+];
+export const LANGUAGES = [
+    {key: 'en', value: 'English'},
+    {key: 'fr', value: 'French'},
+];
+export const APP_MODES = [
+    {key: 'sim', value: 'Simulation'},
+    {key: 'live', value: 'Live'},
+]
+export const THEMES = [
+    {key: 'lt', value: 'Light'},
+    {key: 'dk', value: 'Dark'},
+]
 export const LOCAL_STORAGE_KEYS = {
     WALLETS: 'wallets',
     TRANSACTIONS: 'transactions',
@@ -142,6 +159,13 @@ export const EXPENSE_CATEGORIES = [
     // 'Other'
 ];
 
+export const PAYMENT_METHODS = [
+    {key: 'om', value: 'OM'},
+    {key: 'momo', value: 'MoMo'},
+    {key: 'cc', value: 'Card Payment'},
+    {key: 'pp', value: 'PayPal'},
+    {key: 'bank', value: 'Bank Transfer'}
+]
 export const MODAL_TYPES = {
     a: 'account',
     w: 'wallet',
@@ -150,11 +174,13 @@ export const MODAL_TYPES = {
     modes: {
         //FUNDING ACCOUNT ACTIONS....
         credit: 'Top-up',
-        debit: 'Withdraw',
+        debit: 'Cashout',
 
         //WALLET ACTIONS....
         newWallet: 'Create wallet',
         editWallet: 'Edit wallet',
+        delete: {title: 'Delete wallet', 
+            message: 'This action is permanent and cannot be undone! Continue?'},
         cashOut: 'Send',
         cashIn: 'Receive'
     },

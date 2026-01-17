@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {Box, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornment, Input, FilledInput, OutlinedInput, Button, Paper, Container, Typography} from '@mui/material';
+import { formatDate } from '../../../refactor/utils/helperFunctions/Utils';
 
 import {PostAdd} from '@mui/icons-material'
 
@@ -32,7 +33,7 @@ const AllTransactions = ({wallets, bankStatement=[], prefs}) => {
                     :listing.map((transaction, id)=> (
                         <Paper key={id}>
                             <Typography variant='h5'>
-                            {`${transaction.date }: ${transaction.type==='Cash-in'? 'Deposit to ' : 'Withdrawal from '}  ${transaction.wallet }: ${ settings.currency} ${transaction.amount}`}
+                            {`${formatDate(transaction.date)}: ${transaction.type==='Cash-in'? 'Deposit to ' : 'Withdrawal from '}  ${transaction.wallet }: ${ settings.currency} ${transaction.amount}`}
                             </Typography>    
                         </Paper>
                     ))

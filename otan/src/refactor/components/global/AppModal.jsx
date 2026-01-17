@@ -13,6 +13,9 @@ import {MODAL_TYPES } from "../../lib/konstants/Defaults";
 import AppDialog from './AppDialog';
 import SendingForm from '../../forms/SendingForm';
 import ReceivingForm from '../../forms/ReceivingForm';
+import TopUpForm from '../../forms/TopUpForm';
+import WalletCreationForm from '../../forms/WalletCreationForm';
+
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -28,7 +31,7 @@ const style = {
     bgcolor: 'white',
     // border: '1px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 2,
 };
 
 export default function AppModal({children}) {
@@ -52,11 +55,10 @@ export default function AppModal({children}) {
         case MODAL_TYPES.warn: 
             btnText = 'Yes'
             break;
+        case MODAL_TYPES.modes.delete:
+            btnText = 'Delete'
+            break;
         default: btnText = 'Ok'
-    }
-    const onSubmit = ()=>{
-        console.log('Submitting:', title);
-        handleCloseModal()
     }
     
     switch(modalType){
@@ -73,7 +75,28 @@ export default function AppModal({children}) {
             sx={{position: 'fixed', bottom: '4'}}
             aria-describedby="alert-dialog-slide-description"
         >
-            Funding Account's Transactions
+            <TopUpForm 
+            // title={title}
+            payLoad={payLoad}
+            handleCloseModal={handleCloseModal}
+            />
+        </Dialog>
+        </>);
+
+        case MODAL_TYPES.w:
+            return (
+        <>
+        <Dialog
+            open={open}
+            slots={{
+            transition: Transition,
+            }}
+            keepMounted
+            onClose={handleCloseModal}
+            sx={{position: 'fixed', bottom: '4'}}
+            aria-describedby="alert-dialog-slide-description"
+        >
+            <WalletCreationForm handleCloseModal={handleCloseModal}/>
         </Dialog>
         </>);
 
@@ -91,11 +114,11 @@ export default function AppModal({children}) {
             aria-describedby="alert-dialog-slide-description"
         >
             <AppDialog
-                title={title}
-                payLoad={payLoad}
                 btnText={btnText}
+                title={MODAL_TYPES.modes.delete.title}
+                notice={MODAL_TYPES.modes.delete.message}
+                payLoad={payLoad}
                 handleCloseModal={handleCloseModal}
-                onSubmit={onSubmit}
             />
         </Dialog>
         </>);

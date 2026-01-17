@@ -14,7 +14,14 @@
   color: white;
 } */
 
+
+/* LIGHT THEME  */
 body {
-  background-color: #bfbec1f9;
-  color: white;
+  background-color: whitesmoke;
+  color: black;
+  /* color: rgb(102, 93, 55); */
 }
+
+/* DARK THEME */
+
+/* bgcolor: '#010714bf', color: 'white' */

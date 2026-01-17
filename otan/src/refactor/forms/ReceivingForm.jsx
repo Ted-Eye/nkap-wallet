@@ -22,17 +22,17 @@ export default function ReceivingForm({payLoad, handleCloseModal}) {
     const methods = {
         register, handleSubmit, control, getValues, errors, isSubmitting
     };
-    
+    const {activeWallet, handleReceiving} = useWallet()
     const onSubmit = (data)=>{
-        console.log('Submitting', data);
+        handleReceiving(data)
         handleCloseModal()
     }
 
-    if (Object.keys(errors).length > 0) {
-        return (
-            <pre>{JSON.stringify(errors, null, 2)}</pre>
-        );
-    }
+    // if (Object.keys(errors).length > 0) {
+    //     return (
+    //         <pre>{JSON.stringify(errors, null, 2)}</pre>
+    //     );
+    // }
     
     return (
         <FormProvider {...methods}>
@@ -40,8 +40,7 @@ export default function ReceivingForm({payLoad, handleCloseModal}) {
                 component="form" 
                 onSubmit={handleSubmit(onSubmit)} 
                 sx={{ p: 4, 
-                    bgcolor: '#cfe8fc', 
-                    border: '2px solid #000', 
+                    // bgcolor: '#cfe8fc', 
                     boxShadow: 24,}}>
                 <Typography variant="h4" gutterBottom>
                     Recharge wallet

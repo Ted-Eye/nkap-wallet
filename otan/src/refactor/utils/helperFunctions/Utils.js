@@ -1,24 +1,25 @@
 import dayjs from "dayjs";
 
-    const formatDate = (dateString) => {
-    return dayjs(dateString).format('MMMM D, YYYY');
+export const formatDate = (date) => {
+    return dayjs(date).format('MMMM D, YYYY');
 };
 
-    const formatDateTime = (dateString) => {
-    return dayjs(dateString).format('MMMM D, YYYY h:mm A');
+export const formatDateTime = (date) => {
+    return dayjs(date).format('MMMM D, YYYY h:mm A');
 };
 
-    const isDateToday = (dateString) => {
-    const inputDate = dayjs(dateString);
+export const isDateToday = (date) => {
+    const inputDate = dayjs(date);
     const today = dayjs();
     return inputDate.isSame(today, 'day');
 };
 
 
 // Function to stamp date in "MMMM D, YYYY h:mm A" format 
-export const stampDate = (dateString) => {
-    const inputDate = dayjs(dateString);
-    return inputDate.format('MMMM D, YYYY h:mm A');
+export const stampDate = () => {
+    const now = dayjs();
+    const formattedDate = now.format('YYYY-MM-DD HH:mm:ss');
+    return formattedDate;
 }; 
 
 export const updateBalance = (accountBalance, transaction) => {

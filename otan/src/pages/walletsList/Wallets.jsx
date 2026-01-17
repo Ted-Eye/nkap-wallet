@@ -1,35 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
-import {useForm, FormProvider} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod'
 
-import {Box, Container, TextField, Select, InputLabel, MenuItem, FormControl, InputAdornment, Input, FilledInput, OutlinedInput, Button, Typography, Card, CardHeader, CardContent, Tooltip, CardActionArea, Stack} from '@mui/material';
-import {SaveAs, CancelOutlined, DeleteOutline, Edit, AddCardOutlined, WalletOutlined, AttachMoneyOutlined, InfoOutline, CallReceivedOutlined, MoveToInboxOutlined, MoveToInbox} from '@mui/icons-material';
-import IosShareIcon from '@mui/icons-material/IosShare';
-
-import RechargeForm from "../../components/RechargeForm";
-import AddTransaction from "../../components/AddTransaction";
-import AllTransactions from "../transactionHistory/allTransactions/AllTransactions";
+import {Box, Container, Button, Typography, Card, CardContent} from '@mui/material';
+import {DeleteOutline, Edit, WalletOutlined, AttachMoneyOutlined, InfoOutline} from '@mui/icons-material';
 import dayjs from "dayjs";
-import WalletForm from "../../components/forms/WalletForm";
-import MyModal from "../../components/modal/Modal";
-import SimpleBackdrop from "../../components/utils/BackDrp";
-import WalletsProvider from "../../components/WalletsProvider";
 import { walletSchema, transactionSchema, walletDefaultValues, transactionDefaultValues } from "../../components/forms/FormSchema";
-import { data } from "react-router-dom";
-import MyContainer from "../../components/layouts/MyContainer";
-import { set } from "zod";
-
 
 
 export default function Wallets({}) {
-	
-	const [bankStatement, setBankStatement]=useState(()=>{
-        return JSON.parse(localStorage.getItem('transactions')) || [];
-    });
-	const [prefs, setPrefs]=  
-    useState(()=>{
-        return JSON.parse(localStorage.getItem('settings'))||{language:'english', currency:'CFA', theme:'light'}
-    })
 
 	const [wallets, setWallets] = useState(()=>{
             return JSON.parse(localStorage.getItem('wallets')) || [{
@@ -91,19 +70,6 @@ export default function Wallets({}) {
 		setInitialData(data);
 		setModalType(type);
 	};
-	// const toggleEditMode = (id)=>{
-	// 	setEditMode(true)
-	// 	// const [walletToEdit] = wallets.filter(w=>w.id===id)
-	// 	// // handleOpenForm('wallets', walletToEdit)
-	// 	// setTargetWallet([walletToEdit])
-	// 	// console.log(walletToEdit)
-	// }
-	// const editWallet = (id)=>{
-	// 	const walletToEdit = wallets.filter(wallet=>wallet.id===id);
-	// 	setTargetWallet(walletToEdit);
-	// 	console.log(targetWallet)};
-
-	const handleCloseForm = ()=>{setModalType(null)}
 
 	// SUBMIT HANDLER FOR WALLETS AND TRANSACTIONS
 	const handleFormSubmit = methods.handleSubmit((data)=>{
@@ -163,19 +129,6 @@ export default function Wallets({}) {
 		
 	});
 
-
-
-	// const [newTransaction, setNewTransaction] = useState({
-    //     id: crypto.randomUUID(),
-    //     type: 'Cash-in', 
-    //     amount: 0, 
-    //     motive: '', 
-    //     note: '', 
-    //     date: dayjs().format('DD/MM/YYYY HH:mm:ss'),
-    // })
-
-	
-
 	// 1. WALLET FUNCTIONS (CREATING A NEW WALLET, EDITING AND DELETING WALLETS)
 
 	const updateWalletStatus = ()=>{
@@ -216,14 +169,7 @@ export default function Wallets({}) {
 		}	
 	}
 
-	
-
-	
-	
-
-
 	// 2. TRANSACTION FUNCTIONS (DEPOSIT/WITHDRAWAL)
-
 	const openTransactionForm = (id)=>{
 		const [walletInstance] = wallets.filter((wallet)=>wallet.id===id);
 		// console.log(walletInstance)
@@ -232,9 +178,7 @@ export default function Wallets({}) {
 			
 	}
 
-
 	// DEFAULT TRANSACTION MOTIVES
-
     // useEffect(()=>{
     //     if(newTransaction.type==="Cash-in"){
     //         setNewTransaction(newTransaction=>({...newTransaction, motive:"Salary"}))
@@ -297,31 +241,12 @@ export default function Wallets({}) {
 		localStorage.setItem('transactions', JSON.stringify(transactions))
 
 	},[transactions])
-
-	// 3. SHARED FUNCTIONS
-
 	
     return (
 		<>
 
 		{/* CODE BELLOW DISPLAYS WALLETS -- WALLETS COMPONENT  */}
-		<FormProvider {...methods}>
-			<Box >
-				<AllWallets 
-				handleOpenForm={handleOpenForm}
-				handleCloseForm={handleCloseForm}
-				handleFormSubmit={handleFormSubmit}
-				toggleEditMode={toggleEditMode}
-				resetEditMode={resetEditMode}
-				initialData={initialData}
-				modalType={modalType}
-				editMode={editMode}
-				defaultValues={defaultValues} 
-				prefs={prefs}
-				bankStatement={bankStatement}
-				wallets={wallets}/>
-			</Box>
-			<Box>
+		<Box>
 			<Container>
 				<Typography variant="h6" gutterBottom>
 					{ `My wallets (${wallets.length}):`}
@@ -365,7 +290,7 @@ export default function Wallets({}) {
 					<Box sx={{paddingTop:'25px', paddingBottom: '10px', backgroundColor: '#cfe8fc'}}>
 						<span style={{}}> 
 								<Button 
-								onClick={()=>{handleOpenForm('transaction', {...defaultValues, id:crypto.randomUUID(), date: dayjs().toDate(), motive: 'Shopping', type: 'Cash-in', wallet: wallet.title, walletID: wallet.id})}}
+								onClick={()=>{handleOpenForm('transaction', {...defaultValues, id:crypto.randomUUID(), date: dayjs().toISOString(), motive: 'Shopping', type: 'Cash-in', wallet: wallet.title, walletID: wallet.id})}}
 								style={{textTransform: 'none', 
 										padding: 	'5px', marginRight: '55px'}}
 										variant="outlined"
@@ -378,7 +303,7 @@ export default function Wallets({}) {
 							
 							<span style={{padding: '5px'}}>
 								<Button	
-								onClick={()=>{handleOpenForm('wallet', wallet),toggleEditMode()}}
+				onClick={()=>{handleOpenForm('wallet', wallet),toggleEditMode()}}
 								style={{textTransform: 'none', padding: '5px'}} variant="outlined">Edit<Edit/>
 								</Button>
 							</span>
@@ -398,57 +323,13 @@ export default function Wallets({}) {
 							</Button>
 					</Box>
 					</Card>
-
-					<WalletsCard 
-						wallet={wallet} 
-						transactionDefaultValues={transactionDefaultValues}
-						defaultValues={defaultValues}
-						key={id}
-						prefs={prefs}
-						handleCloseForm={handleCloseForm}
-						handleOpenForm={handleOpenForm}
-						toggleEditMode={toggleEditMode}
-						handleDelete={handleDelete}
-						/>
-
 				<Box/>
 			</Box>
 						)
 					)
 				}
-
-				<Box>
-						<Button 
-					onClick={() => handleOpenForm('wallet', {...defaultValues, id:crypto.randomUUID()})}
-						variant="outlined"
-									style={{textTransform: 'none', marginTop: 25}}>
-							Create a new wallet
-							</Button>
-					</Box>
-
-
-
-				{/* MODAL FORMS */}
-			<Box>
-				<MyModal isOpen={!!modalType} onClose={handleCloseForm}
-				>
-					<Box >
-								{
-							modalType==='wallet'&& <WalletForm initialData={initialData} onSubmit={handleFormSubmit} onClose={handleCloseForm}
-							editMode={editMode}
-							resetEditMode={resetEditMode}
-							/>
-						}
-						{
-							modalType==='transaction'&& <AddTransaction initialData={initialData} onSubmit={handleFormSubmit} onClose={handleCloseForm}/>
-						}
-
-							</Box>	
-				</MyModal>
-			</Box>
 			</Container>
 		</Box>
-		</FormProvider>
 	</>
 
 	)

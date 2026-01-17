@@ -27,7 +27,7 @@ const WalletForm = ({initialData, onSubmit, onClose, editMode, resetEditMode}) =
 
 	const {register, control, formState: {errors,isSubmitting, isSubmitted}} = useFormContext();
 
-	// Show errors if any
+	// Show schema errors if any
     if (Object.keys(errors).length > 0) {
         return (
             <pre>{JSON.stringify(errors, null, 2)}</pre>

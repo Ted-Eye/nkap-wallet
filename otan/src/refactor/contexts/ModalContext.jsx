@@ -10,8 +10,8 @@ export const ModalProvider = ({children}) => {
 
     const handleOpenModal = (type, mode=null, data=null) => {
         setModalType(type);
+        setMode(mode);
         setModalData(data);
-        setMode(mode)
         setIsOpen(true);
     };
 
