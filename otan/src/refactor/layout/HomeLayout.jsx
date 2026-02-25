@@ -1,13 +1,13 @@
-import { Container, Paper } from "@mui/material"
+import { Box, Container, Paper } from "@mui/material"
 
 const HomeLayout = ({children}) => {
     return (
-        <Container sx={{height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Paper sx={{width: '400', padding: '2'}}>
+        <Box sx={{height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Paper sx={{width: '100%', padding: '2'}}>
                 {children}
             </Paper>
         
-        </Container>
+        </Box>
     )
     }
 

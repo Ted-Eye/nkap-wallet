@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Stack, Grid } from '@mui/material'
+import { Box, Typography, Button, Stack, Grid, Container } from '@mui/material'
 import { useWallet } from '../contexts/WalletContext'
 import {Link} from 'react-router-dom'
 import WalletsCard from '../components/wallet/WalletCard';
@@ -8,39 +8,44 @@ import {walletDefaultValues} from '../../refactor/schemas/WalletSchema'
 import WalletCreationForm from '../forms/WalletCreationForm';
 import { useEffect } from 'react';
 import { DeleteWalletAction, EditWalletAction } from '../components/wallet/WalletActions';
+import { useAuth } from '../contexts/AuthContext';
+import ActionAccordion from '../components/global/ActionAccordion';
 export default function WalletsPage() {
-    const {wallets} = useWallet();
+    const {wallets, getWallets, loading} = useAuth();
     const {handleOpenModal} = useModal();
     const payLoad = walletDefaultValues;
     
+    // useEffect(()=>{
+    //     getWallets()
+    // }, [])
+    
     return (
-        <Box>
+        <Container mt={8} sx={{pb: '84px', pt: '64px'}}>
+            {
+                loading&& <Container>Loading</Container>
+            }
             <Stack direction={'row'} spacing={2} padding={2}>
-                <Typography variant='p'>
+                <Typography >
                 {
                     `All wallets: ${wallets?.length}`
                 }
             </Typography>
             <Button 
-            onClick={()=> handleOpenModal(MODAL_TYPES.w, MODAL_TYPES.modes.newWallet, {...payLoad, id: crypto.randomUUID()})}
+            onClick={()=> handleOpenModal(MODAL_TYPES.w, MODAL_TYPES.modes.newWallet, payLoad)}
             variant='outlined'>
                 New wallet
             </Button>
             </Stack>
-            <Grid>
+            <Grid bgcolor={'#b6b2aaff'}>
                 {
-                    wallets.map((wallet, id)=>
+                    wallets&& wallets.map((wallet, id)=>
                     <Box key={id}>
-                        <WalletsCard wallet={wallet}/>
-                        <Link 
-                        key={id} to={`/wallets/${wallet.title}`}>
-                        Details
-                        </Link>
-                        <EditWalletAction wallet={wallet}/>
-                        <DeleteWalletAction wallet={wallet}/>
+                        <ActionAccordion wallet={wallet} id={id}>
+                            <WalletsCard wallet={wallet}/>
+                        </ActionAccordion>
                     </Box>)
                 }
             </Grid>  
-        </Box>
+        </Container>
     )
 };

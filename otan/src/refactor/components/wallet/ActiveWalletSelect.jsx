@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react'
 import {Box} from '@mui/material';
 import RHFSelect from '../../utils/formControls/RHFSelect';
 import {useForm, FormProvider} from 'react-hook-form';
-import {useWallet} from '../../contexts/WalletContext'
-export default function ActiveWalletSelect({wallet}) {
-    const {wallets, activeWalletID, activeWallet, switchActiveWallet} = useWallet();
-    const methods = useForm({mode: 'onChange', defaultValues: {currentWallet: wallet.id}});
+import {useWallet} from '../../contexts/WalletContext';
+import { useAuth } from '../../contexts/AuthContext';
 
-    
+export default function ActiveWalletSelect({wallet}) {
+    const {wallets, activeWalletID, activeWallet} = useWallet();
+    const{switchActiveWallet} = useAuth();
+    const methods = useForm({mode: 'onChange', defaultValues: {currentWallet: wallet?.id ?? ''}});
+
     const onSubmit = ()=>{
-        switchActiveWallet(methods.getValues('currentWallet'));
-        // console.log(methods.getValues('currentWallet'))
-        // console.log(activeWallet)
+        const selected = methods.getValues('currentWallet')
+        if (!selected) return
+        if (typeof switchActiveWallet === 'function') {
+            switchActiveWallet(selected);
+        }
     }
     // useEffect(()=>{
     //     console.log('Selected:', selected)

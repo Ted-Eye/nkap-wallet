@@ -7,7 +7,7 @@ import SouthEastIcon from '@mui/icons-material/SouthEast';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import { ArrowCircleDownIcon, ArrowCircleDownRightIcon, ArrowCircleUpRightIcon } from '@phosphor-icons/react'
 import {useModal} from '../../contexts/ModalContext';
-import {EXPENSE_CATEGORIES, INCOME_CATEGORIES, MODAL_TYPES} from '../../lib/konstants/Defaults';
+import {TRANSACTION_TYPES, MODAL_TYPES} from '../../lib/konstants/Defaults';
 import dayjs from 'dayjs';
 import {SEND_DEFAULTS, RECEIVE_DEFAULTS} from '../../lib/konstants/Defaults'
 import { stampDate } from '../../utils/helperFunctions/Utils';
@@ -24,15 +24,15 @@ export default function WalletActions({wallet}) {
                 <Stack direction="row" spacing={1}>
                 <Button 
                 sx={{width: '100%', textTransform: 'none', color: 'black'}}
-                onClick={()=>handleOpenModal(MODAL_TYPES.t, MODAL_TYPES.modes.cashIn, {...SEND_DEFAULTS, id:crypto.randomUUID(), date: stampDate(), motive: INCOME_CATEGORIES[0].value, type: 'Cash-in', wallet: wallet.title, walletID: wallet.id})}
+                onClick={()=>handleOpenModal(MODAL_TYPES.t, MODAL_TYPES.modes.cashIn, {...transactionDefaultValues, transactionType: TRANSACTION_TYPES[1], wallet: wallet.id})}
                 // variant="outlined" 
                 startIcon={<ArrowCircleDownRightIcon size={36} color="#eda113ff" weight="fill"
                 />}>
-                    Receive
+                    Recharge
                 </Button>
                 <Button 
                 sx={{width: '100%', textTransform: 'none', borderLeft: 'solid #eda113ff 3px', borderRadius: 0, color: 'black'}}
-                onClick={()=>handleOpenModal(MODAL_TYPES.t, MODAL_TYPES.modes.cashOut, {...SEND_DEFAULTS, id:crypto.randomUUID(), date: stampDate(), motive: EXPENSE_CATEGORIES[0].value, type: 'Cash-out', wallet: wallet.title, walletID: wallet.id})}
+                onClick={()=>handleOpenModal(MODAL_TYPES.t, MODAL_TYPES.modes.cashOut, {...transactionDefaultValues, transactionType: TRANSACTION_TYPES[0], wallet: wallet.id, origin_id: wallet.id, receiver_name: ''})}
                 // variant="contained" 
                 startIcon={<ArrowCircleUpRightIcon size={36} color="black" weight="fill" />}
         

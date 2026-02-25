@@ -8,7 +8,7 @@ export default function WalletDetailsPage() {
     const {wallets} = useWallet()
     const wallet = wallets.find((w)=>w.title===title)
     const transactions = wallet.transactions
-    console.log(wallet)
+    
     return (
         <Container sx={{mt: 8}}>
             <h2>wallet details: { title }</h2>

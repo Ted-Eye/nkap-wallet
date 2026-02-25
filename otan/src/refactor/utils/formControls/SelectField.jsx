@@ -1,6 +1,7 @@
 import {InputLabel, MenuItem, FormControl, Select} from '@mui/material'
 
-export default function SelectField({ label, value, onChange, options, name }) {
+export default function SelectField({ label, value, onChange, options, name, control }) {
+    
     return (
         <div>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -12,8 +13,9 @@ export default function SelectField({ label, value, onChange, options, name }) {
                 name={name}
                 onChange={onChange}
                 label={label}
+                control={control}
                 >
-                    {options.map((opt)=>(<MenuItem key={opt.id} value={opt.value}>{opt.value}</MenuItem>))}
+                    {options.map((opt, index)=>(<MenuItem key={index} value={opt}>{opt}</MenuItem>))}
                 {/* <MenuItem value="">
                     <em>None</em>
                 </MenuItem>

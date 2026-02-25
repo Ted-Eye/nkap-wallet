@@ -4,6 +4,11 @@
   padding: 0;
   text-align: center;
   box-sizing: border-box;
+  background-image: url(../src/assets/bgs/1698674272464.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;  
+  background-position: top;
+  background-attachment: fixed;
 }
 /* body {
   background-color: rgb(216, 217, 214);
@@ -17,7 +22,8 @@
 
 /* LIGHT THEME  */
 body {
-  background-color: whitesmoke;
+  /* background-color: rgb(186, 182, 175); */
+  background-color: rgb(231, 222, 207);
   color: black;
   /* color: rgb(102, 93, 55); */
 }

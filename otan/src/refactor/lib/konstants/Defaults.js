@@ -12,78 +12,8 @@ export const DEFAULT_WALLET_VALUES = {
     note: ''
 };
 export const DEFAULT_WALLETS = [{
-    id: crypto.randomUUID(),
-    title: "Feeding",
-    accountType: 'Savings account',
-    accountBalance: 43000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-},{
-    id: crypto.randomUUID(),
-    title: "Savings",
-    accountType: 'Savings account',
-    accountBalance: 915000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-}, {
-    id: crypto.randomUUID(),
-    title: "Rents",
-    accountType: 'Savings account',
-    accountBalance: 80000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-}, {
-    id: crypto.randomUUID(),
-    title: "Medicals",
-    accountType: 'Savings account',
-    accountBalance: 225000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-}, {
-    id: crypto.randomUUID(),
-    title: "Crisis(urgent funds)",
-    accountType: 'Savings account',
-    accountBalance: 450000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-}, {
-    id: crypto.randomUUID(),
-    title: "Bills(water, electricity...)",
-    accountType: 'Savings account',
-    accountBalance: 78000,
-    minBalance: 0,
-    monthlyLimit: 0,
-    transactions: [],
-    revenues: [],
-    expenses: [],
-    status: 'blank',
-    note: ''
-}];
+    title: "N'kap"
+}]
 
 
 export const RECEIVE_DEFAULTS = {
@@ -139,25 +69,32 @@ export const INCOME_CATEGORIES = [
     {key: 'biz', value: 'Business'},
     {key: 'inv', value: 'Investments'},
     {key: 'gif', value: 'Gifts'},
-    {key: 'ala', value: 'Allowance'},
-    {key: 'oth', value: 'Other'}
+    {key: 'oth', value: 'Others'},
+    // {key: 'ala', value: 'Allowance'},
 ];
 
 export const EXPENSE_CATEGORIES = [
 
     {key: 'ren', value: 'Rents'},
     {key: 'shop', value: 'Shopping'},
-    {key: 'tran', value: 'Transport/Logistics'},
     {key: 'med', value: 'Medicals'},
-    {key: 'fee', value: 'Fees/Subscriptions'},
-    {key: 'lei', value: 'Leisure'},
-    {key: 'oth', value: 'Other'}
+    {key: 'cer', value: 'Ceremony'},
+    {key: 'oth', value: 'Other'},
+    // {key: 'tran', value: 'Transport/Logistics'},
+    // {key: 'fee', value: 'Fees/Subscriptions'},
+    // {key: 'lei', value: 'Leisure'},
     // 'Rent',
     // 'Utilities',
     // 'Groceries',
     // 'Transportation',
     // 'Other'
 ];
+
+
+// IN SYNC WITH API VALUES: 
+export const INCOME_SOURCES = ['salary', 'business', 'investment', 'gift', 'others']
+export const EXPENSE_MOTIVES = ['rent', 'shopping', 'medicals', 'ceremony', 'others']
+export const TRANSACTION_TYPES = ['Send', 'Receive']
 
 export const PAYMENT_METHODS = [
     {key: 'om', value: 'OM'},
@@ -188,4 +125,6 @@ export const MODAL_TYPES = {
 
 export const DIALOG_TEXTS = {
     deleteWallet: 'This wallet will be permanently deleted. Do you still want to continue?',
-}
+};
+export const ACCESS_TOKEN = 'access';
+export const REFRESH_TOKEN = 'refresh'

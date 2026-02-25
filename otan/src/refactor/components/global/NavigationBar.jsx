@@ -7,17 +7,21 @@ import {DotsThreeCircleIcon} from '@phosphor-icons/react';
 import {AndroidLogoIcon} from '@phosphor-icons/react';
 import { useState } from 'react';
 import UserAvatar from '../user/UserAvatar';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 
-const pages = ['Home', 'Wallets', 'Settings'];
-const settings = ['@Ted-Eye', 'Account', 'Dashboard', 'Logout'];
 export default function NavigationBar() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
+    const {user, isAuth, logOut, logIn} = useAuth();
+    const username = user?.username || null;
+    const pages = ['Home', 'Wallets', 'Transactions', 'Settings'];
+    const settings = [isAuth&& `@${username}`, 'My profile', 'Dashboard'];
+    
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -30,7 +34,7 @@ export default function NavigationBar() {
         setAnchorElUser(null);
     };
     return (
-        <AppBar position="fixed" sx={{ bgcolor: '#383638ff' }}>
+        <AppBar position="fixed" sx={{ bgcolor: '#383638ff', zIndex: 50}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     {/* <AndroidLogoIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
@@ -54,10 +58,11 @@ export default function NavigationBar() {
                         textDecoration: 'none',
                         }}
                     >
-                        <img width={100} src="IMG_20260117_081502.png" alt="Logo" />
+                        <img width={100} src="logo.png" alt="Logo" />
                     </Typography>
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        {
+                            isAuth && 
+                            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                         size="large"
                         aria-label="account of current user"
@@ -87,7 +92,7 @@ export default function NavigationBar() {
                         {pages.map((link, index) => (
                                             <MenuItem 
                                             component= {NavLink}
-                                            to={link==='Home'? '/': `/${link}`}
+                                            to={`/${link}`}
                                             key={link} 
                                             onClick={handleCloseNavMenu}>
                                             <Typography sx={{ textAlign: "center" }}>{link}</Typography>
@@ -95,6 +100,8 @@ export default function NavigationBar() {
                                         ))}
                         </Menu>
                     </Box>
+                        }
+                    
                     <Typography sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} >
                         {/* <AndroidLogoIcon/> */}
                         {/* <img width={50} src="fen_s logo.png" alt="" /> */}
@@ -117,14 +124,16 @@ export default function NavigationBar() {
                         }}
                     >
                         
-                        <img width={100} src="IMG_20260117_081502.png" alt="Logo" />
+                        <img width={100} src="logo.png" alt="Logo" />
                     </Typography>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
+                {
+                    isAuth &&
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
                     {pages.map((page) => (
                     <Button
                                         key={page}
                                         component={NavLink}
-                                        to={page==='Home'? '/': `/${page.toLowerCase()}`}
+                                        to={`/${page.toLowerCase()}`}
                                         onClick={handleCloseNavMenu}
                                         sx={{ my: 2, color: "#eda113ff", display: "block" }}
                                     >
@@ -132,7 +141,10 @@ export default function NavigationBar() {
                                     </Button>
                     ))}
                 </Box>
-                <Box sx={{ flexGrow: 0 }}>
+                }
+                {
+                    isAuth? 
+                    <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
@@ -156,12 +168,32 @@ export default function NavigationBar() {
                     onClose={handleCloseUserMenu}
                     >
                     {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                        <Link key={setting} >
+                            <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography sx={{ textAlign: 'center' }}>
+                            {setting}
+                            </Typography>
                         </MenuItem>
+                        </Link>
+                        
                     ))}
+                    <MenuItem onClick={logOut}>
+                        <Typography sx={{ textAlign: 'center' }}
+                        onClick={handleCloseUserMenu}
+                        >
+                            Logout
+                            </Typography>
+                        </MenuItem>
                     </Menu>
                 </Box>
+                : <NavLink to={'/login'}>
+                    <Button sx={{
+                    color: 'green',
+                    textTransform: 'none'}}>
+                    Sign-In
+                </Button>
+                </NavLink>
+                }
                 </Toolbar>
         </Container>
     </AppBar>

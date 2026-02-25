@@ -10,9 +10,9 @@ export const PrefsProvider = ({ children }) => {
         return JSON.parse(localStorage.getItem('prefs')) || defaultSettings;
     });
 
-    useEffect(() => {
-        localStorage.setItem('prefs', JSON.stringify(prefs));
-    }, [prefs]);
+    // useEffect(() => {
+    //     localStorage.setItem('prefs', JSON.stringify(prefs));
+    // }, [prefs]);
     const onChangePrefs = (e) => {
         const { name, value } = e.target;
         setPrefs((prevPrefs) => ({

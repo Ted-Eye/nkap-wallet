@@ -3,7 +3,8 @@ import {
     Container, 
     Typography, 
     Paper, Stack,
-    Button, } from '@mui/material'
+    Button,
+    } from '@mui/material'
 import { useWallet} from '../contexts/WalletContext'
 import WalletsCard from '../components/wallet/WalletCard';
 import Chip from '@mui/material/Chip';
@@ -17,18 +18,50 @@ import UserAvatar from '../components/user/UserAvatar';
 import { useEffect, useState } from 'react';
 import { BankIcon } from '@phosphor-icons/react';
 import { BorderStyle } from '@mui/icons-material';
-import GridContainer from '../components/user/GridContainer';
+import MyGridContainer, {GridItem} from '../components/user/GridContainer';
+import { useAuth } from '../contexts/AuthContext';
+import { toLowerCase } from 'zod';
+import HomeLayout from '../layout/HomeLayout';
+import { BoldText, SubHeading, SubHeading2 } from '../components/global/typography/Typo';
+import MyContainer from '../../components/layouts/MyContainer';
+import { AlertComponent, Success } from '../components/global/alerts';
+
 
 
 export default function HomePage() {
     const {accBalance, handleTopUpNCashOut} = useFunding();
-    const {wallets, activeWalletID, refreshData, switchActiveWallet} = useWallet();
-    const activeWallet = JSON.parse(localStorage.getItem('activeWallet')) || wallets.find((w)=>w.id===activeWalletID)
+    const {user, logOut, isAuth, funding, wallets, activeWalletID, prefs} = useAuth();
+    const {walletMsg, showAlert} = useWallet()
     
+    const username = user?.username || 'Guest';
+
+    const activeWallet = wallets?.find((w)=>w.id===activeWalletID);
+    const [alertMsg, setAlertMsg] = useState('')
+
+    
+    useEffect(()=>{
+        if(walletMsg==='success') {
+            setAlertMsg("Transaction completed successfully!")
+        } else if(walletMsg==='failed') {
+            setAlertMsg("Transaction failed!")
+        }
+    }, [walletMsg])
+    console.log(showAlert, walletMsg)
     return (
-        <Container sx={{height: '98dvh', mt:8}}>
-            <Stack direction={'column'}  pb={2} spacing={2}>
-                
+        <Container sx={{mt:6, position: 'relative', height: '100dvh'}}>
+            <Stack direction={'column'}  pb={2} spacing={2} position={'relative'}>
+                {isAuth&& 
+                    <Typography
+                    fontSize={16}
+                    textAlign={'left'}
+                    sx={{position: 'absolute', top: 22, left: 1, color: '#0a0909ff', bgcolor: '#eda113ff', padding: '2px 6px', 
+                        border: 'solid 2px #048021ff',
+                        borderBottom: 0,
+                        borderRadius: 3.5, textTransform: toLowerCase, zIndex: 1}}
+                    >
+                    {`@_${username}.affair`} 
+                </Typography>
+                }
                 <Stack direction={'column'}>
                     <Stack direction={'row'}  border={'solid 2px #eda113ff'}
                     borderRadius={2}
@@ -36,25 +69,31 @@ export default function HomePage() {
                     sx={{ bgcolor: 'whitesmoke', pt: 1}}
                     color={'gray'}
                     pl={2}
-                    mt={2}
+                    mt={4}
                     >
+                        
                         <Box flexGrow={1}>
-                            <HubTopUpAction/>
+                            <HubTopUpAction wallet={funding}/>
                         </Box>
                         <Box>
-                            <FundingAccActions/>
+                            <FundingAccActions wallet={funding}/>
                         </Box>
                         
                     </Stack>
                     
                 </Stack>
-
+                    {/* {
+                        walletMsg && <Success message={alertMsg}/>
+                    } */}
+                    
                 </Stack>
             <Stack position={'relative'}>
                 <Stack spacing={2}>
+                    <AlertComponent/>
                     <WalletsCard wallet = {activeWallet}/>
                     <WalletActions wallet={activeWallet}/>
-                    <ActiveWalletSelect wallet = {activeWallet}/>
+                    <ActiveWalletSelect 
+                    wallet = {activeWallet}/>
                     {/* <Box mt={1} >
                         <Chip 
                         variant='filled' 
@@ -63,8 +102,29 @@ export default function HomePage() {
                     </Box> */}
                 </Stack>
             </Stack>
-            <GridContainer/>
-            
+            {
+                    
+                }
+            <MyGridContainer>
+                <GridItem>
+                    <BoldText text="Marketplace"/>
+                </GridItem>
+                <GridItem>
+                    <BoldText text="My business"/>
+                </GridItem>
+                <GridItem>
+                    <BoldText text={`"Njangi" `}/>
+                </GridItem>
+                <GridItem>
+                    <BoldText text="Virtual cards"/>
+                </GridItem>
+                <GridItem>
+                    <BoldText text="My budgets"/>
+                </GridItem>
+                <GridItem>
+                    <BoldText text="Fundraiser"/>
+                </GridItem>
+            </MyGridContainer>
         </Container>
     )
 };

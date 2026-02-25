@@ -13,15 +13,16 @@ export default function RHFSelect({name, label, options={}, rules, placeholder, 
                     rules={rules}
                     render={({ field, fieldState}) => (
                         <FormControl 
-                        fullWidth error={!!fieldState.error}>
+                            fullWidth 
+                            error={!!fieldState.error}>
                             <InputLabel >{label}</InputLabel>
                             <Select {...field}  label={label}
                             value={field.value || ''}
                             onChange={(e)=>field.onChange(e.target.value)}
-                            // placeholder={placeholder}
+                            placeholder={placeholder}
                             displayEmpty>
                                 <MenuItem value="" disabled>
-                                    {placeholder}
+                                    {/* {label} */}
                                 </MenuItem>
                                 {
                                     options.map((opt)=>(<MenuItem key={opt.id} value={opt.id} onClick={handleSubmit(onSubmit)}

@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 src/components/
 src/pages/
+.env

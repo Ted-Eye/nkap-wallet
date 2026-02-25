@@ -11,23 +11,20 @@ const Item = styled(Paper)(({theme})=>({
     backgroundColor: '#1A2027',
     }),
 }))
-export default function GridContainer({children}) {
+export default function MyGridContainer({children}) {
     return (
     <Box sx={{flexGrow: 1, mt: 1}}>
-        <Grid container spacing={1}>
-            <Grid size={{xs: 6, md: 3}}>
-                <Item>Marketllace</Item>
-            </Grid>
-            <Grid size={{xs: 6, md: 3}}>
-                <Item>Njangi</Item>
-            </Grid>
-            <Grid size={{xs: 6, md: 3}}>
-                <Item>Secure payments</Item>
-            </Grid>
-            <Grid size={{xs: 6, md: 3}}>
-                <Item>Vault</Item>
-            </Grid>       
+        <Grid container spacing={2} mt={2}>
+            {children}   
         </Grid>
     </Box>
     )
+}
+
+export const GridItem = ({children}) => {
+    return (<Grid size={{xs: 6, md: 3}}>
+                <Item sx={{bgcolor: '#eda113ff', border: 'solid 1px green'}}>
+                    {children}
+                </Item>
+            </Grid>  )
 }

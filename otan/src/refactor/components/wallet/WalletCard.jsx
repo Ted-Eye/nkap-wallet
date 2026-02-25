@@ -12,6 +12,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import WalletActions from './WalletActions';
 import WalletFunding from './WalletFunding';
 import ActiveWalletSelect from './ActiveWalletSelect';
+import { SubHeading, SubHeading2 } from '../global/typography/Typo';
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
     // width: '98dvw',
@@ -24,9 +25,11 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
     border: 'solid, 1px, #dbddd2ff'
     })); 
 
-    export default function WalletsCard({ wallet, handleCloseForm, handleOpenForm, toggleEditMode, handleDelete, transactionDefaultValues, defaultValues}) {
-    
+    export default function WalletsCard({ wallet}) {
     const {prefs} = usePrefs()
+    if (!wallet) {
+        return null
+    }
     return (
         <Box>
             <Stack spacing={1} >
@@ -35,20 +38,12 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
                 <Stack direction={'column'} spacing={2}>
                     <Stack 
                     spacing={1} alignItems="center">
-                        <Typography color='#eda113ff' fontSize={26}
-                        letterSpacing={6}
-                        borderBottom={'solid black'}
-                        
-                        textTransform= 'uppercase'>
-                            { wallet.title}
-                        </Typography>
-                        <Typography variant="h6" gutterBottom sx={{padding:'6px 8px', color: 'black'}}>
-                        {`Balance: ${prefs.currency }  ${ wallet.accountBalance} `}
-                        </Typography>
+                        <SubHeading text={ wallet.title}/>
+                        <SubHeading2 text={`Balance: ${prefs.currency }  ${ wallet.accountBalance} `}/>
                         <Stack direction='row' spacing={6}>
                             <Box>
                                 <LockClockIcon/>
-                            <Typography variant="p" fontSize={12}>
+                            <Typography variant='caption'>
                             {`Min balance: ${prefs.currency} ${wallet.minBalance}`}
                             </Typography>
                             </Box>

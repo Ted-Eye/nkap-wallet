@@ -16,7 +16,7 @@ import Wallets from './pages/walletsList/Wallets';
 import { Box, Stack } from '@mui/material';
 import Feed from './components/layouts/Feed';
 
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import Preferences from './pages/Preferences/Preferences';
 import AllTransactions from './pages/transactionHistory/allTransactions/AllTransactions'
 import MyContainer from './components/layouts/MyContainer';
@@ -26,7 +26,7 @@ import { useForm } from 'react-hook-form';
 import { transactionSchema, walletSchema, transactionDefaultValues, walletDefaultValues } from './components/forms/FormSchema';
 import { ModalProvider } from './refactor/contexts/ModalContext';
 import { PrefsProvider } from './refactor/contexts/PrefsContext';
-import { WalletProvider } from './refactor/contexts/WalletContext';
+import { useWallet, WalletProvider } from './refactor/contexts/WalletContext';
 import HomePage from './refactor/pages/HomePage';
 import WalletsPage from './refactor/pages/WalletsPage';
 import TransactionsPage from './refactor/pages/TransactionsPage';
@@ -38,18 +38,36 @@ import WalletDetailsPage from './refactor/pages/WalletDetailsPage';
 import TransactionDetailsPage from './refactor/pages/TransactionDetailsPage';
 import { FundingProvider } from './refactor/contexts/FundingAccContext';
 import NavigationBar from './refactor/components/global/NavigationBar';
+import NotFound from './refactor/pages/NotFound';
+import LoginPage from './refactor/pages/LoginPage';
+import RegisterPage from './refactor/pages/RegisterPage';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from './refactor/lib/konstants/Defaults';
+import ProtectedRoutes from './refactor/components/global/ProtectedRoutes';
+import LandingPage from './refactor/pages/LandingPage';
+import { useAuth } from './refactor/contexts/AuthContext';
+import LoadingIndicator from './refactor/components/global/LoadingIndicator';
+import BgContainer from './refactor/components/global/BgContainer';
+import { AlertComponent } from './refactor/components/global/alerts';
 
-
+function logout() {
+    localStorage.clear(ACCESS_TOKEN, REFRESH_TOKEN)
+    return <Navigate to='/login'/>
+}
+function registerAndLogout() {
+    localStorage.clear(ACCESS_TOKEN, REFRESH_TOKEN)
+    return <RegisterPage/>
+}
 
 function App() {
-    const [bankStatement, setBankStatement]=useState(()=>{
-        return JSON.parse(localStorage.getItem('transactions')) || [];
-    });
-	const [prefs, setPrefs]=  
-    useState(()=>{
-        return JSON.parse(localStorage.getItem('settings'))||{language:'english', currency:'CFA', theme:'light'}
-    })
-
+    // const [bankStatement, setBankStatement]=useState(()=>{
+    //     return JSON.parse(localStorage.getItem('transactions')) || [];
+    // });
+	// const [prefs, setPrefs]=  
+    // useState(()=>{
+    //     return JSON.parse(localStorage.getItem('settings'))||{language:'english', currency:'CFA', theme:'light'}
+    // })
+    const {isAuth, loading} = useAuth()
+    
 
 
 
@@ -60,16 +78,27 @@ function App() {
                     <FundingProvider>
                         <NavigationBar/>
                         <AppModal/>
-                        <Routes>
-						<Route path='/' element={<HomePage/>}></Route>
+                        {loading&& <LoadingIndicator/>}
+                        <BgContainer>
+                            <Routes>
+                        <Route path='/' element={<LandingPage/>}></Route>
+						<Route path='/home' element={<ProtectedRoutes>
+                            <HomePage/>
+                        </ProtectedRoutes>}></Route>
+                        <Route path='/login' element={<LoginPage/>}></Route>
+                        <Route path='/register' element={<RegisterPage/>}></Route>
 						<Route path='/wallets' element={<WalletsPage/>}></Route>
 						<Route path='/transactions' element={<TransactionsPage/>}></Route>
 						<Route path='/settings' element={<SettingsPage/>}></Route>
                         <Route path='/wallets/:title' element={<WalletDetailsPage/>}></Route>
                         <Route path='/transactions/:id' element={<TransactionDetailsPage/>}></Route>
+                        <Route path='*' element={<NotFound/>}></Route>
 					</Routes>
+                        </BgContainer>
                     </FundingProvider>
-                    <NavigationLinks/>
+                    {/* {
+                        isAuth&& <NavigationLinks/>
+                    } */}
 				</WalletProvider>
 			</PrefsProvider>
 		</ModalProvider>
