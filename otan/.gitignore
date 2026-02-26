@@ -22,6 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-src/components/
-src/pages/
-.env
+otan/src/components/
+otan/src/pages/
+otan/.env
