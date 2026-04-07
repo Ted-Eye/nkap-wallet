@@ -4,7 +4,7 @@ import { usePrefs } from './PrefsContext';
 import api from '../../api';
 import { set } from 'zod';
 import { useAuth } from './AuthContext';
-import { Success } from '../components/global/alerts';
+import { useModal } from './ModalContext';
 
 
 const WalletContext = createContext();
@@ -15,6 +15,7 @@ export const WalletProvider = ({ children }) => {
     const [showAlert, setShowAlert] = useState(false)
     const [walletMsg, setWalletMsg] = useState(null)
     const [alertType, setAlertType] = useState(null)
+    const {handleCloseModal} = useModal()
     // useEffect(() => {
     //     getActiveWallet()
     // }, []);
@@ -83,9 +84,7 @@ export const WalletProvider = ({ children }) => {
     //     const saved = localStorage.getItem('transactions');
     //     return saved ? JSON.parse(saved) : [];
     // });
-    useEffect(()=>{
-        setWalletMsg(walletMsg)
-    }, [showAlert])
+    
     const addTransaction = async (transaction) => {
         setLoading(true)
         try {
@@ -111,35 +110,36 @@ export const WalletProvider = ({ children }) => {
     };
     const rechargeWallet = async (transaction) => {
         setLoading(true)
+        console.log(loading)
         try {
             const res = await api.post('users/recharge/', {targetId: transaction.wallet, amount: transaction.amount, note:transaction.note})
             if(res.status===201) {
-                setLoading(false)
                 getWallets()
                 getTransactions()
                 setAlertType('success')
-                setWalletMsg("success")
+                setWalletMsg("Transaction completed!")
                 
             } else {
                 alert("Failed")
             }
         } catch (error) {
-            console.log(error)
+            console.log(error.response?.data || error.message)
+            setAlertType('info')
+                setWalletMsg('Not enough funds in  your fundin (hub) account.')
+        } finally {
             setLoading(false)
-        } 
+        }
     }
     const sendMoney = async (transaction) => {
         setLoading(true)
         try {
             const res = await api.post("users/send/", transaction)
             if(res.status===201) {
-                setLoading(false)
                 getWallets()
                 getTransactions()
                 setAlertType('success')
-                // setWalletMsg('Transaction completed!')
-                
-                
+                handleCloseModal()
+                setWalletMsg('Your transfer was successful!')    
             } else {
                 alert("Failed")
             }
@@ -148,13 +148,20 @@ export const WalletProvider = ({ children }) => {
             if(error.status===400){
                 console.log(error)
                 const errorwalletMsg = error.response.data.error
+                setAlertType('info')
                 setWalletMsg(errorwalletMsg)
             } else {
-                alert('The provided username does not belong to any user! Please verify that you have entered the username correctly')
+                setAlertType('error')
+                setWalletMsg('User not found, please check the username and try again!')
             }
             
+        }  finally {
+            setLoading(false)
         }
     }
+
+
+
     // HANDLING TRANSACTION EXECUTIONS 
 
     // 1. HANDLING SENDING TRANSACTIONS :
@@ -335,6 +342,16 @@ export const WalletProvider = ({ children }) => {
     const value = {
         funding, wallets, addWallet, editWallet, deleteWallet, transactions, getWallets, rechargeWallet, sendMoney, addTransaction, handleSending,  handleReceiving, updateWallet, walletMsg, showAlert, alertType, setAlertType
     }
+    // clear alertType after a short delay whenever we show a message
+    useEffect(() => {
+        if (alertType && walletMsg) {
+            const timer = setTimeout(() => {
+                setAlertType(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [alertType, walletMsg]);
+
     return (
         <WalletContext.Provider value={value}>
             {children}

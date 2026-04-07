@@ -12,11 +12,12 @@ export default function RHFSelect({name, label, options={}, rules, placeholder, 
                     control={control}
                     rules={rules}
                     render={({ field, fieldState}) => (
-                        <FormControl 
+                        <FormControl sx={{bgcolor: 'whitesmoke', borderRadius: 2}}
                             fullWidth 
                             error={!!fieldState.error}>
                             <InputLabel >{label}</InputLabel>
                             <Select {...field}  label={label}
+                            sx={{borderColor: 'black'}}
                             value={field.value || ''}
                             onChange={(e)=>field.onChange(e.target.value)}
                             placeholder={placeholder}

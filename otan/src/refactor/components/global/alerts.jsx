@@ -1,30 +1,12 @@
-import {Alert, IconButton, Snackbar} from '@mui/material';
+import {Alert, Box, IconButton, Snackbar} from '@mui/material';
 import AlertTitle from '@mui/material/AlertTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { useEffect, useState } from 'react';
 import { useWallet } from '../../contexts/WalletContext';
-
-// export default function DescriptionAlerts() {
-//     return (
-//     <Stack sx={{ width: '100%' }} spacing={2}>
-//         <Alert severity="info">
-//             <AlertTitle>Info</AlertTitle>
-//             This is an info Alert with an informative title.
-//         </Alert>
-//         <Alert severity="warning">
-//             <AlertTitle>Warning</AlertTitle>
-//             This is a warning Alert with a cautious title.
-//         </Alert>
-//         <Alert severity="error">
-//             <AlertTitle>Error</AlertTitle>
-//             This is an error Alert with a scary title.
-//         </Alert>
-//         </Stack>
-//     );
-// }
+import { useAuth } from '../../contexts/AuthContext';
 
 
-export function Success({ message, onClose }) {
+export function AlertDisplay({alert, title, message, onClose }) {
     const [open, setOpen] = React.useState(true);
 
     const handleClose = (event, reason) => {
@@ -46,76 +28,97 @@ export function Success({ message, onClose }) {
         </IconButton>
     </React.Fragment>);
     
-    return (
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert severity="success" action={action} variant='filled'>
-                <AlertTitle>{message}</AlertTitle>
-                
-            </Alert>
-        </Snackbar>
-    )
+    console.log(title, message)
+    switch (alert) {
+        case 'success':
+            return (
+                <Snackbar open={open} 
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                sx={{mt: 8}}
+                autoHideDuration={6000} onClose={handleClose}>
+                    <Alert severity="success" action={action} variant='filled'>
+                        <AlertTitle>{title}</AlertTitle>
+                        {message}
+                    </Alert>
+                </Snackbar>
+            );
+        case 'error':
+            return (
+                <Snackbar open={open} 
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                sx={{mt: 8}}
+                autoHideDuration={6000} onClose={handleClose}>
+                    <Alert severity="error" action={action} variant='filled'>
+                        <AlertTitle>{title}</AlertTitle>
+                        {message}
+                    </Alert>
+                </Snackbar>
+            );
+        case 'info':
+            return (
+                <Snackbar open={open} 
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                sx={{mt: 8}}
+                autoHideDuration={6000} onClose={handleClose}>
+                    <Alert severity="info" action={action} variant='filled'>
+                        <AlertTitle>{title}</AlertTitle>
+                        {message}
+                    </Alert>
+                </Snackbar>
+            );
+        case 'warning':
+            return (
+                <Snackbar open={open} 
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                sx={{mt: 8}}
+                autoHideDuration={6000} onClose={handleClose}>
+                    <Alert severity="warning" action={action} variant='filled'>
+                        <AlertTitle>{title}</AlertTitle>
+                        {message}
+                    </Alert>
+                </Snackbar>
+            );
+        default:
+            return null;
+    }
 };
 
-export function Error({ message, onClose }) {
-    return (
-        <Alert severity="error">
-            <AlertTitle>Error</AlertTitle>
-            {message}
-        </Alert>
-    )
-};
-
-export function Info({ message, onClose }) {
-    return (
-        <Alert severity="info">
-            <AlertTitle>Info</AlertTitle>
-            {message}
-        </Alert>
-    )
-};
-
-export function Warning({ message, onClose }) {
-    return (
-        <Alert severity="warning">
-            <AlertTitle>Warning</AlertTitle>
-            {message}
-        </Alert>
-    )
-};
 export const AlertComponent = ({onClose }) => {
     const [open, setOpen] = React.useState(true);
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
         if(onClose) onClose();
     };
     const {alertType, walletMsg} = useWallet()
-    const [type, setType] = useState(null);
-    const [message, setMessage] = useState('completed!')
-    // if(alertType===null) return null
-    // const type = alertType;
-    
-    
-    console.log(alertType, message)
+    const [title, setTitle] = useState('')
+    const {authAlert} = useAuth()
+    const {type, message} = authAlert
+    const alertCode = alertType || type
+    const alertMsg = walletMsg || message
+    // console.log(alertMsg)
     useEffect(()=>{
-        setType(alertType)
-    }, [])
-    switch (type) {
-        case 'success':
-            alert(message)
-            return <Alert severity="success" variant='filled'>
-                <AlertTitle>{message}</AlertTitle>
-            </Alert>;
-        case 'error':
-            return <Error message={message} onClose={onClose} />;
-        case 'info':
-            return <Info message={message} onClose={onClose} />;
-        case 'warning':
-            return <Warning message={message} onClose={onClose} />;
-        default:
-            return null;
-    }
+        switch(alertCode) {
+            case 'success':
+                setTitle(alertCode===alertType? 'Completed!' : "Account created!")
+                break;
+            case 'error':
+                setTitle(alertCode===alertType? 'User not found' : 'Network error')
+                break;
+            case 'info':
+                setTitle(alertCode===alertType? 'Insufficient funds': 'Invalid username')
+                break;
+            case 'warning':
+                setTitle('Watch out!')
+                break;
+            default:
+                setTitle('')
+        }
+    }, [alertCode])
+    
+    if(!alertCode || !alertCode) return null;
+    
+    return <AlertDisplay message={alertMsg} onClose={handleClose} alert={alertCode} title={title}/>
 }

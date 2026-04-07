@@ -14,7 +14,7 @@ import {transactionSchema} from '../schemas/TransactionSchema'
 import SelectField from '../utils/formControls/SelectField';
 import { useState } from 'react';
 import { SubHeading2 } from '../components/global/typography/Typo';
-import { Success } from '../components/global/alerts';
+
 
 const motives = EXPENSE_MOTIVES
 
@@ -44,7 +44,7 @@ export default function SendingForm({
             handleCloseModal()
         } else {
             sendMoney(data)
-            handleCloseModal()
+            // handleCloseModal()
         }
         // const balance = wallet.accountBalance
         // if(data.amount>balance){

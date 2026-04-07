@@ -15,8 +15,8 @@ import WalletActions from '../components/wallet/WalletActions';
 import FundingAccActions, { HubTopUpAction } from '../components/global/FundingAccActions';
 import { FundingProvider, useFunding } from '../contexts/FundingAccContext';
 import UserAvatar from '../components/user/UserAvatar';
-import { useEffect, useState } from 'react';
-import { BankIcon } from '@phosphor-icons/react';
+import { use, useEffect, useState } from 'react';
+import { BankIcon, CreditCardIcon, PiggyBankIcon, ShoppingCartIcon, StorefrontIcon, UsersThreeIcon, WalletIcon } from '@phosphor-icons/react';
 import { BorderStyle } from '@mui/icons-material';
 import MyGridContainer, {GridItem} from '../components/user/GridContainer';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,29 +24,19 @@ import { toLowerCase } from 'zod';
 import HomeLayout from '../layout/HomeLayout';
 import { BoldText, SubHeading, SubHeading2 } from '../components/global/typography/Typo';
 import MyContainer from '../../components/layouts/MyContainer';
-import { AlertComponent, Success } from '../components/global/alerts';
+
 
 
 
 export default function HomePage() {
     const {accBalance, handleTopUpNCashOut} = useFunding();
     const {user, logOut, isAuth, funding, wallets, activeWalletID, prefs} = useAuth();
-    const {walletMsg, showAlert} = useWallet()
     
     const username = user?.username || 'Guest';
-
     const activeWallet = wallets?.find((w)=>w.id===activeWalletID);
-    const [alertMsg, setAlertMsg] = useState('')
+    
 
     
-    useEffect(()=>{
-        if(walletMsg==='success') {
-            setAlertMsg("Transaction completed successfully!")
-        } else if(walletMsg==='failed') {
-            setAlertMsg("Transaction failed!")
-        }
-    }, [walletMsg])
-    console.log(showAlert, walletMsg)
     return (
         <Container sx={{mt:6, position: 'relative', height: '100dvh'}}>
             <Stack direction={'column'}  pb={2} spacing={2} position={'relative'}>
@@ -89,7 +79,7 @@ export default function HomePage() {
                 </Stack>
             <Stack position={'relative'}>
                 <Stack spacing={2}>
-                    <AlertComponent/>
+                    {/* <AlertComponent/> */}
                     <WalletsCard wallet = {activeWallet}/>
                     <WalletActions wallet={activeWallet}/>
                     <ActiveWalletSelect 
@@ -108,21 +98,27 @@ export default function HomePage() {
             <MyGridContainer>
                 <GridItem>
                     <BoldText text="Marketplace"/>
+                    <ShoppingCartIcon size={32} color='#eda113ff'/>
                 </GridItem>
                 <GridItem>
                     <BoldText text="My business"/>
+                    <StorefrontIcon size={32} color='#eda113ff'/>
                 </GridItem>
                 <GridItem>
                     <BoldText text={`"Njangi" `}/>
+                    <UsersThreeIcon size={32} color='#eda113ff'/>
                 </GridItem>
                 <GridItem>
-                    <BoldText text="Virtual cards"/>
+                    <BoldText text="Cards"/>
+                    <CreditCardIcon size={32} color='#eda113ff'/>
                 </GridItem>
                 <GridItem>
-                    <BoldText text="My budgets"/>
+                    <BoldText text="Budgets"/>
+                    <WalletIcon size={32} color='#eda113ff'/>
                 </GridItem>
                 <GridItem>
                     <BoldText text="Fundraiser"/>
+                    <PiggyBankIcon size={32} color='#eda113ff'/>
                 </GridItem>
             </MyGridContainer>
         </Container>

@@ -23,7 +23,7 @@ export default function MyGridContainer({children}) {
 
 export const GridItem = ({children}) => {
     return (<Grid size={{xs: 6, md: 3}}>
-                <Item sx={{bgcolor: '#eda113ff', border: 'solid 1px green'}}>
+                <Item sx={{bgcolor: 'whitesmoke', borderRadius: 2}}>
                     {children}
                 </Item>
             </Grid>  )

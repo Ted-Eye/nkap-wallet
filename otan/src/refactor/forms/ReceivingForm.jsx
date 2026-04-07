@@ -15,6 +15,7 @@ import {MODAL_TYPES, INCOME_SOURCES} from '../../refactor/lib/konstants/Defaults
 import {transactionSchema} from '../schemas/TransactionSchema';
 import SelectField from '../utils/formControls/SelectField';
 import { SubHeading, SubHeading2 } from '../components/global/typography/Typo';
+import { useAuth } from '../contexts/AuthContext';
 
 const motives = INCOME_SOURCES
 export default function ReceivingForm({payLoad, handleCloseModal}) {
@@ -24,11 +25,12 @@ export default function ReceivingForm({payLoad, handleCloseModal}) {
                 resolver: zodResolver(transactionSchema),
                 defaultValues: safePayload
             })
+    const {loading} = useAuth()
     const methods = {
         register, handleSubmit, control, getValues, errors, isSubmitting
     };
     // derive a local `loading` flag from the form state to avoid undefined
-    const loading = isSubmitting;
+    // loading = isSubmitting;
     const {activeWallet, handleReceiving, funding, wallets, addTransaction, rechargeWallet} = useWallet()
     const [fundingAcount, setFundingAccount] = useState(false)
 

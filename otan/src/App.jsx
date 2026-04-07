@@ -48,6 +48,7 @@ import { useAuth } from './refactor/contexts/AuthContext';
 import LoadingIndicator from './refactor/components/global/LoadingIndicator';
 import BgContainer from './refactor/components/global/BgContainer';
 import { AlertComponent } from './refactor/components/global/alerts';
+import { AlertProvider } from './refactor/contexts/AlertContext';
 
 function logout() {
     localStorage.clear(ACCESS_TOKEN, REFRESH_TOKEN)
@@ -72,7 +73,8 @@ function App() {
 
 
 	return (
-		<ModalProvider>
+		<AlertProvider>
+            <ModalProvider>
 			<PrefsProvider>
 				<WalletProvider>
                     <FundingProvider>
@@ -80,6 +82,7 @@ function App() {
                         <AppModal/>
                         {loading&& <LoadingIndicator/>}
                         <BgContainer>
+                            <AlertComponent/>
                             <Routes>
                         <Route path='/' element={<LandingPage/>}></Route>
 						<Route path='/home' element={<ProtectedRoutes>
@@ -102,6 +105,7 @@ function App() {
 				</WalletProvider>
 			</PrefsProvider>
 		</ModalProvider>
+        </AlertProvider>
 	)
     // return <>
     //         <NavBar/>

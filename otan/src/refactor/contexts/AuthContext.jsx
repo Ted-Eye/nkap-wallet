@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../../api";
 import {useNavigate} from 'react-router-dom'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../lib/konstants/Defaults";
+import { ACCESS_TOKEN, ALERT, REFRESH_TOKEN } from "../lib/konstants/Defaults";
 import { set } from "zod";
 
 const AuthContext = createContext();
@@ -18,7 +18,9 @@ export const AuthProvider = ({children}) => {
         return JSON.parse(localStorage.getItem('prefs')) || {}
     });
     const [loading, setLoading] = useState(true);
-
+    const [authAlert, setAuthAlert] = useState({type: '', message: ''})
+    const [alert, setAlert] = useState(ALERT)
+    console.log(alert)
     // Initialize activeWalletID from localStorage so consumers don't see null
     useEffect(() => {
         const saved = localStorage.getItem('activeWallet')
@@ -36,6 +38,7 @@ export const AuthProvider = ({children}) => {
 
     // FETCH USER'S WALLETS !!!
         const getWallets = async () => {
+            setLoading(true)
             try {
                 const response = await api.get('users/wallets/');
                 const data = response.data;
@@ -64,11 +67,13 @@ export const AuthProvider = ({children}) => {
 
     // FETCH USER'S TRANSACTIONS !!!
     const getTransactions = async () => {
+        setLoading(true)
         try {
             const response = await api.get(`users/transactions/`);
             const data = response.data;
             setTransactions(data);
             setLoading(false);
+            setLoading(false)
             return response.data;
         } catch (error) {
             console.error('Error fetching transactions:', error);
@@ -160,13 +165,26 @@ export const AuthProvider = ({children}) => {
     }
     const navigate = useNavigate()
     const register = async (credentials)=>{
+        setLoading(true)
         try {
             const res = await api.post('users/', credentials)
-            console.log('Registration successful:', res.data);
-            setLoading(false)
-            navigate('/login')
+            if(res.status === 201) {
+                setAuthAlert({type: 'success', message: 'Registration successful! Please log in with your username and password to continue.'})
+                navigate('/login')
+                setLoading(false)
+            }
         } catch (error) {
             console.error('Registration failed:', error);
+            if (error.code==='ERR_NETWORK') {
+                setAuthAlert({type: 'error', message: 'Please check your internet connection and try again.'})
+                // navigate('/register') 
+            } else if (error.response?.status === 400) {
+                setAuthAlert({type: 'info', message: 'Username already exists. Please choose a different one.'})
+            } else {
+                setAuthAlert({type: 'warning', message: 'Registration failed. Please try again.'})
+            }
+        } finally {
+            setLoading(false)
         }
     }
     const login = async (credentials)=> {
@@ -186,7 +204,12 @@ export const AuthProvider = ({children}) => {
             if (error.code==='ERR_NETWORK') {
                 alert(`${error.message}. Pleae check your internet connection and try again`)
                 navigate('/login')
-            } else {
+            } else if (error.response?.status === 401) {
+                // alert('Invalid username or password. Please verify your credentials and try again.')
+                setAuthAlert({type: 'error', message: 'Invalid username or password. Please verify your credentials and try again.'})
+                navigate('/login')
+            }
+            else {
                 console.error("Failed to login", error)
                 alert("Wrong username or password")
             }
@@ -203,11 +226,19 @@ export const AuthProvider = ({children}) => {
         navigate('/')
 
     }
+    useEffect(()=>{
+        if (authAlert.type) {
+            const timer = setTimeout(() => {
+                setAuthAlert({type: '', message: ''})
+            }, 6000);
+            return () => clearTimeout(timer);
+        }
+    }, [authAlert])
     const value = {
         user, isAuth, loading, register,
         login, getWallets, activeWalletID, funding, prefs,
         wallets, logOut, switchActiveWallet,
-        transactions, getTransactions, setLoading
+        transactions, getTransactions, setLoading, authAlert
     }
     
     return <AuthContext.Provider value={value}>
