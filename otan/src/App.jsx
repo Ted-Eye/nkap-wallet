@@ -6,32 +6,17 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import AddTransaction from './components/AddTransaction';
-import TransactionCard from './components/TransactionCard';
-import Sidebar from './components/layouts/Sidebar';
-import NavBar from './components/layouts/NavBar';
-import Wallets from './pages/walletsList/Wallets';
-import { Box, Stack } from '@mui/material';
-import Feed from './components/layouts/Feed';
+
 
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import Preferences from './pages/Preferences/Preferences';
-import AllTransactions from './pages/transactionHistory/allTransactions/AllTransactions'
-import MyContainer from './components/layouts/MyContainer';
-import AllWallets from './pages/walletsList/AllWallets';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { transactionSchema, walletSchema, transactionDefaultValues, walletDefaultValues } from './components/forms/FormSchema';
 import { ModalProvider } from './refactor/contexts/ModalContext';
 import { PrefsProvider } from './refactor/contexts/PrefsContext';
-import { useWallet, WalletProvider } from './refactor/contexts/WalletContext';
+import { WalletProvider } from './refactor/contexts/WalletContext';
 import HomePage from './refactor/pages/HomePage';
 import WalletsPage from './refactor/pages/WalletsPage';
 import TransactionsPage from './refactor/pages/TransactionsPage';
 import SettingsPage from './refactor/pages/SettingsPage';
 import AppModal from './refactor/components/global/AppModal';
-import NavigationLinks from './refactor/components/global/NavigationLinks';
-import { Wallet } from '@mui/icons-material';
 import WalletDetailsPage from './refactor/pages/WalletDetailsPage';
 import TransactionDetailsPage from './refactor/pages/TransactionDetailsPage';
 import { FundingProvider } from './refactor/contexts/FundingAccContext';
