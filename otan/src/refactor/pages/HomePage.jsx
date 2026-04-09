@@ -5,25 +5,18 @@ import {
     Paper, Stack,
     Button,
     } from '@mui/material'
-import { useWallet} from '../contexts/WalletContext'
 import WalletsCard from '../components/wallet/WalletCard';
-import Chip from '@mui/material/Chip';
-import Avatar from '@mui/material/Avatar';
-import AppModal from '../components/global/AppModal';
 import ActiveWalletSelect from '../components/wallet/ActiveWalletSelect';
 import WalletActions from '../components/wallet/WalletActions';
 import FundingAccActions, { HubTopUpAction } from '../components/global/FundingAccActions';
-import { FundingProvider, useFunding } from '../contexts/FundingAccContext';
-import UserAvatar from '../components/user/UserAvatar';
+import { useFunding } from '../contexts/FundingAccContext';
 import { use, useEffect, useState } from 'react';
-import { BankIcon, CreditCardIcon, PiggyBankIcon, ShoppingCartIcon, StorefrontIcon, UsersThreeIcon, WalletIcon } from '@phosphor-icons/react';
-import { BorderStyle } from '@mui/icons-material';
+import { BankIcon, CoinsIcon, CreditCardIcon, PiggyBankIcon, ShoppingCartIcon, StorefrontIcon, UsersThreeIcon, VaultIcon, WalletIcon } from '@phosphor-icons/react';
 import MyGridContainer, {GridItem} from '../components/user/GridContainer';
 import { useAuth } from '../contexts/AuthContext';
 import { toLowerCase } from 'zod';
 import HomeLayout from '../layout/HomeLayout';
 import { BoldText, SubHeading, SubHeading2 } from '../components/global/typography/Typo';
-import MyContainer from '../../components/layouts/MyContainer';
 
 
 
@@ -34,7 +27,16 @@ export default function HomePage() {
     
     const username = user?.username || 'Guest';
     const activeWallet = wallets?.find((w)=>w.id===activeWalletID);
-    
+    const offers = [
+        {title: 'Marketplace', icon: <ShoppingCartIcon size={32} color='#eda113ff'/>},
+        {title: 'My business', icon: <StorefrontIcon size={32} color='#eda113ff'/>},
+        {title: `Njangi`, icon: <UsersThreeIcon size={32} color='#eda113ff'/>},
+        {title: 'Cards', icon: <CreditCardIcon size={32} color='#eda113ff'/>},
+        {title: 'Budgets', icon: <WalletIcon size={32} color='#eda113ff'/>},
+        {title: 'Fundraiser', icon: <PiggyBankIcon size={32} color='#eda113ff'/>},
+        {title: 'Daily savings', icon: <VaultIcon size={32} color='#eda113ff'/>},
+        {title: 'Investments', icon: <CoinsIcon size={32} color='#eda113ff'/>},
+    ]
 
     
     return (
@@ -96,30 +98,15 @@ export default function HomePage() {
                     
                 }
             <MyGridContainer>
-                <GridItem>
-                    <BoldText text="Marketplace"/>
-                    <ShoppingCartIcon size={32} color='#eda113ff'/>
-                </GridItem>
-                <GridItem>
-                    <BoldText text="My business"/>
-                    <StorefrontIcon size={32} color='#eda113ff'/>
-                </GridItem>
-                <GridItem>
-                    <BoldText text={`"Njangi" `}/>
-                    <UsersThreeIcon size={32} color='#eda113ff'/>
-                </GridItem>
-                <GridItem>
-                    <BoldText text="Cards"/>
-                    <CreditCardIcon size={32} color='#eda113ff'/>
-                </GridItem>
-                <GridItem>
-                    <BoldText text="Budgets"/>
-                    <WalletIcon size={32} color='#eda113ff'/>
-                </GridItem>
-                <GridItem>
-                    <BoldText text="Fundraiser"/>
-                    <PiggyBankIcon size={32} color='#eda113ff'/>
-                </GridItem>
+                {offers.map((offer, index)=>(
+                    <GridItem key={index}>
+                        <Box display={'flex'}  alignItems={'center'} flexDirection={'row'} gap={1} my={2} justifyContent={'space-around'}> 
+                            {offer.icon}
+                            <BoldText text={offer.title}/>
+                        </Box>
+                        
+                    </GridItem>
+                ))}
             </MyGridContainer>
         </Container>
     )

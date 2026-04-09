@@ -30,6 +30,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
     if (!wallet) {
         return null
     }
+    console.log(wallet)
     return (
         <Box>
             <Stack spacing={1} >
@@ -44,7 +45,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
                             <Box>
                                 <LockClockIcon/>
                             <Typography variant='caption'>
-                            {`Min balance: ${prefs.currency} ${wallet.minBalance}`}
+                            {`Status: ${wallet.status}`}
                             </Typography>
                             </Box>
                             <Box>

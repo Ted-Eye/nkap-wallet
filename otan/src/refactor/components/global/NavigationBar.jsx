@@ -4,11 +4,12 @@ import {AppBar, Toolbar,
     Tooltip, MenuItem
 } from '@mui/material'
 import {DotsThreeCircleIcon} from '@phosphor-icons/react';
-import {AndroidLogoIcon} from '@phosphor-icons/react';
 import { useState } from 'react';
 import UserAvatar from '../user/UserAvatar';
 import { Link, NavLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { set } from 'zod';
 
 
 export default function NavigationBar() {
@@ -20,13 +21,15 @@ export default function NavigationBar() {
     const {user, isAuth, logOut, logIn} = useAuth();
     const username = user?.username || null;
     const pages = ['Home', 'Wallets', 'Transactions', 'Settings'];
+    const [isActive, setIsActive] = useState(0);
     const settings = [isAuth&& `@${username}`, 'My profile', 'Dashboard'];
     
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (index) => {
+        setIsActive(index);
         setAnchorElNav(null);
     };
 
@@ -46,7 +49,7 @@ export default function NavigationBar() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component={NavLink}
+                        component={RouterLink}
                         to={'/'}
                         sx={{
                         mr: 2,
@@ -91,10 +94,11 @@ export default function NavigationBar() {
                         >
                         {pages.map((link, index) => (
                                             <MenuItem 
-                                            component= {NavLink}
+                                            component= {RouterLink}
                                             to={`/${link}`}
                                             key={link} 
-                                            onClick={handleCloseNavMenu}>
+                                            style={index === isActive ? { backgroundColor: '#eda113ff', color: 'white', fontWeight: 'bold' } : null}
+                                            onClick={() => handleCloseNavMenu(index)}>
                                             <Typography sx={{ textAlign: "center" }}>{link}</Typography>
                                             </MenuItem>
                                         ))}

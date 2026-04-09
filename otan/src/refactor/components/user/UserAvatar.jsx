@@ -4,11 +4,10 @@ import React from 'react'
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function UserAvatar() {
-    const {user} = useAuth()
+    const {user} = useAuth();
     return (
-        <Avatar
-            alt={user} >
-            </Avatar>
+        <Avatar alt={user.username.charAt(0).toUpperCase()} src='user-profile.svg'/>
+            
         
     )
 }

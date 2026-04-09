@@ -44,6 +44,7 @@ export const SubHeading2 = ({text}) => {
 export const BoldText = ({text}) => {
     return <Typography 
                 variant="h6" gutterBottom 
+                fontSize={16}
                 sx={{ color: '#786541ff', textAlign: 'center', }}
             >
                 {text}

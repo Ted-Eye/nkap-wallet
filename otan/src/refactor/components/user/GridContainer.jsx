@@ -14,7 +14,7 @@ const Item = styled(Paper)(({theme})=>({
 export default function MyGridContainer({children}) {
     return (
     <Box sx={{flexGrow: 1, mt: 1}}>
-        <Grid container spacing={2} mt={2}>
+        <Grid container spacing={1} mt={2}>
             {children}   
         </Grid>
     </Box>
@@ -23,7 +23,7 @@ export default function MyGridContainer({children}) {
 
 export const GridItem = ({children}) => {
     return (<Grid size={{xs: 6, md: 3}}>
-                <Item sx={{bgcolor: 'whitesmoke', borderRadius: 2}}>
+                <Item sx={{bgcolor: 'whitesmoke', borderRadius: 2}} >
                     {children}
                 </Item>
             </Grid>  )
